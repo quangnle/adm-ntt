@@ -28,7 +28,7 @@ export default function AppSidebar() {
       >
         <Toolbar />
         <Divider />
-        {[].map((text: string, index: number) => (
+        {['Homepage'].map((text: string, index: number) => (
           <ListItem key={text} disablePadding>
             <ListItemButton component={Link} to={`/${text.toLowerCase()}`}>
               <ListItemIcon>

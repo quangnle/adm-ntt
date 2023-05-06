@@ -1,12 +1,14 @@
 import { Route, Routes } from 'react-router-dom'
 
 import AppMain from '@/layout/main'
-import Login from '@/modules/auth/login'
-import Dashboard from '@/modules/dashboard'
+import Login from '@/pages/auth/login'
+import Dashboard from '@/pages/dashboard'
 import PrivateRoute from './PrivateRoute'
+import Homepage from '@/pages/home'
 
 const internalRoutes = [
-  { name: 'Dashboard', path: '/', component: <Dashboard /> }
+  { name: 'Dashboard', path: '/', component: <Dashboard /> },
+  { name: 'Homepage', path: '/homepage', component: <Homepage /> }
 ]
 
 const AppRoutes = () => {
