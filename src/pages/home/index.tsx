@@ -1,4 +1,5 @@
 import configService from '@/api/config'
+import PreviewDrawer from '@/components/preview-drawer'
 import useFetchConfig from '@/hooks/useFetchConfig'
 import ComponentModule, { registerComponentType } from '@/modules'
 import { LoadingButton } from '@mui/lab'
@@ -54,6 +55,8 @@ export default function Homepage() {
       <Typography variant="h3" mb={2}>
         Homepage
       </Typography>
+
+      <PreviewDrawer width={600} url="https://ntt-solutions.techwiz.tech/" />
 
       {form?.map((comp, index) => (
         <Paper key={index} sx={{ p: 2, mb: 4 }}>

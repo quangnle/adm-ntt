@@ -33,5 +33,6 @@ export default function ComponentModule({
 } & ComponentModuleType) {
   const componentModule = registerComponents[component]
   const compData = data as React.ComponentProps<typeof componentModule.comp>
-  return <componentModule.comp data={compData.data} onChange={onChange} />
+  console.log(component, compData)
+  return <componentModule.comp data={compData} onChange={onChange} />
 }

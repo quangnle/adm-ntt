@@ -19,8 +19,6 @@ const HeroBannerModule: FC<
     data?: HeroBannerProps | null
   }
 > = ({ data, onChange }) => {
-  // useInitialForm(data || {}, DEFAULT_FORM, onChange)
-
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
 
@@ -32,8 +30,6 @@ const HeroBannerModule: FC<
     onChange && onChange(newForm)
   }
   const [errors, _] = useState<Record<string, string>>({})
-
-  if (!data) return null
 
   return (
     <Grid container spacing={2}>
