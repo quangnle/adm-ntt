@@ -6,7 +6,6 @@ import {
   removeLocalStore,
   setLocalStore
 } from './localStore'
-import AuthServices from '@/api/auth'
 
 /**
  * axios config
@@ -27,7 +26,7 @@ export const getToken = (): string | undefined => {
       typeof cache.expire === 'number' &&
       cache.expire >= Date.now()
     ) {
-      return cache.accessToken
+      return cache.access_token
     }
   } catch (error) {
     console.log(error)
@@ -56,10 +55,10 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
   (response) => {
-    if (response.data.accessToken) {
+    console.log(response.data.access_token)
+    if (response.data.access_token) {
       setToken({
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken,
+        access_token: response.data.access_token,
         expire: new Date(moment().add(7200, 'second').toISOString()).getTime()
       })
     }
