@@ -67,7 +67,7 @@ axios.interceptors.response.use(
   async (error) => {
     const status = error.response ? error.response.status : null
     if (status === 401) {
-      window.location.href = '/login'
+      window.location.href = '/admin/login'
       removeLocalStore(LOCAL_STORE_KEY.USER_INFO)
     }
     return Promise.reject(error)

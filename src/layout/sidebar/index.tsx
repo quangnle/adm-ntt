@@ -30,7 +30,10 @@ export default function AppSidebar() {
         <Divider />
         {['Homepage', 'Preview'].map((text: string, index: number) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton component={Link} to={`/${text.toLowerCase()}`}>
+            <ListItemButton
+              component={Link}
+              to={`/admin/${text.toLowerCase()}`}
+            >
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
