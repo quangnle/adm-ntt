@@ -1,0 +1,17 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  // "[typescript]": {
+  //   "editor.formatOnPaste": false,
+  //   "editor.formatOnSave": true
+  // },
+  // "[typescriptreact]": {
+  //   "editor.formatOnPaste": false,
+  //   "editor.formatOnSave": true
+  // }
+
+  // Import Sorter
+  "importSorter.importStringConfiguration.hasSemicolon": false,
+  "importSorter.importStringConfiguration.tabSize": 2,
+}
