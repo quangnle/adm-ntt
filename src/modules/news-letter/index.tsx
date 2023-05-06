@@ -1,31 +1,27 @@
 import MyTextField from '@/components/form/MyTextField'
 import { Grid } from '@mui/material'
 import { FC, useState } from 'react'
+import { ComponentModuleType } from '..'
 
-type ContentImageProps = {
-  heading: string
-  subHeading: string
-  background: string
-}
-
-const DEFAULT_FORM: ContentImageProps = {
+const DEFAULT_FORM = {
   heading: '',
   subHeading: '',
   background: ''
 }
 
-const NewsLetterModule: FC<{ data?: ContentImageProps }> = ({ data }) => {
-  const [form, setForm] = useState(data || DEFAULT_FORM)
-
+type ContentImageProps = typeof DEFAULT_FORM
+const NewsLetterModule: FC<
+  ComponentModuleType & { data?: ContentImageProps | null }
+> = ({ data, onChange }) => {
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
 
     const newForm = {
-      ...form,
+      ...data,
       [name]: value
     }
 
-    setForm(newForm)
+    onChange && onChange(newForm)
   }
   const [errors, _] = useState<Record<string, string>>({})
 
@@ -37,7 +33,7 @@ const NewsLetterModule: FC<{ data?: ContentImageProps }> = ({ data }) => {
           fullWidth
           label="Heading"
           name="heading"
-          value={form.heading}
+          value={data?.heading}
           placeholder="Enter Heading..."
           onChange={handleChangeInput}
           error={!!errors['heading']}
@@ -47,8 +43,8 @@ const NewsLetterModule: FC<{ data?: ContentImageProps }> = ({ data }) => {
           required
           fullWidth
           label="Sub Heading"
-          name="Sub Heading"
-          value={form.subHeading}
+          name="subHeading"
+          value={data?.subHeading}
           placeholder="Enter Sub Heading..."
           onChange={handleChangeInput}
           error={!!errors['subHeading']}

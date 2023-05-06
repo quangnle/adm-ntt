@@ -9,7 +9,7 @@ import { FormHelperText } from '@mui/material'
 import { FormComponentError } from './type'
 
 type TextEditorType = {
-  value: string
+  value?: string
   setValue: (_: string) => void
 } & FormComponentError
 

@@ -1,17 +1,30 @@
 import configService from '@/api/config'
 import { useEffect, useState } from 'react'
 
-export default function useFetchConfig(key: string) {
-  const [config, setConfig] = useState(null)
+type ConfigType<T extends object> = {
+  id: number
+  key: string
+  value: T
+  meta_description: string
+  meta_keywords: string
+}
+
+export default function useFetchConfig<T extends object>(
+  key: string
+): [ConfigType<T> | null, boolean, () => Promise<void>] {
+  const [config, setConfig] = useState<ConfigType<T> | null>(null)
   const [isFetching, setIsFetching] = useState(false)
 
   const fetchConfig = async () => {
     try {
       setIsFetching(true)
       const { data } = await configService.getConfigWithKey(key)
-      console.log(data)
-      setConfig(data)
+      setConfig({
+        ...data,
+        value: JSON.parse(data?.value)
+      })
     } catch (error) {
+      console.log(error)
     } finally {
       setIsFetching(false)
     }

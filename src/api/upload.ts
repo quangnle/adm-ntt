@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const uploadFile = (formData: FormData) =>
-  axios.post('/uploads', formData, {
+  axios.post('/cloud/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 

@@ -2,33 +2,29 @@ import MyTextField from '@/components/form/MyTextField'
 import TextEditor from '@/components/form/TextEditor'
 import { Grid } from '@mui/material'
 import { FC, useState } from 'react'
+import { ComponentModuleType } from '..'
 
-type ContentImageProps = {
-  heading: string
-  content: string
-  rightImg: string
-  background: string
-}
-
-const DEFAULT_FORM: ContentImageProps = {
+const DEFAULT_FORM = {
   heading: '',
   content: '',
   rightImg: '',
   background: ''
 }
 
-const ContentImageModule: FC<{ data?: ContentImageProps }> = ({ data }) => {
-  const [form, setForm] = useState(data || DEFAULT_FORM)
+type ContentImageProps = typeof DEFAULT_FORM
 
+const ContentImageModule: FC<
+  ComponentModuleType & { data?: ContentImageProps | null }
+> = ({ data, onChange }) => {
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
 
     const newForm = {
-      ...form,
+      ...data,
       [name]: value
     }
 
-    setForm(newForm)
+    onChange && onChange(newForm)
   }
   const [errors, _] = useState<Record<string, string>>({})
 
@@ -40,15 +36,17 @@ const ContentImageModule: FC<{ data?: ContentImageProps }> = ({ data }) => {
           fullWidth
           label="Heading"
           name="heading"
-          value={form.heading}
+          value={data?.heading}
           placeholder="Enter Heading..."
           onChange={handleChangeInput}
           error={!!errors['heading']}
           helperText={errors['heading']}
         />
         <TextEditor
-          value={form.content}
-          setValue={(value) => setForm((prev) => ({ ...prev, content: value }))}
+          value={data?.content}
+          setValue={(value) =>
+            onChange && onChange({ ...data, content: value })
+          }
           error={!!errors['content']}
           helperText={errors['content']}
         />

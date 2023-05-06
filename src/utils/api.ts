@@ -55,7 +55,6 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
   (response) => {
-    console.log(response.data.access_token)
     if (response.data.access_token) {
       setToken({
         access_token: response.data.access_token,

@@ -1,17 +1,11 @@
 import MyTextField from '@/components/form/MyTextField'
 import TextEditor from '@/components/form/TextEditor'
+import UploadImage from '@/components/form/UploadImage'
 import { Grid } from '@mui/material'
 import { FC, useState } from 'react'
+import { ComponentModuleType } from '..'
 
-type HeroBannerProps = {
-  subHeading: string
-  heading: string
-  content: string
-  rightImg: string
-  background: string
-}
-
-const DEFAULT_FORM: HeroBannerProps = {
+const DEFAULT_FORM = {
   subHeading: '',
   heading: '',
   content: '',
@@ -19,30 +13,37 @@ const DEFAULT_FORM: HeroBannerProps = {
   background: ''
 }
 
-const HeroBannerModule: FC<{ data?: HeroBannerProps }> = ({ data }) => {
-  const [form, setForm] = useState(data || DEFAULT_FORM)
+type HeroBannerProps = typeof DEFAULT_FORM
+const HeroBannerModule: FC<
+  ComponentModuleType & {
+    data?: HeroBannerProps | null
+  }
+> = ({ data, onChange }) => {
+  // useInitialForm(data || {}, DEFAULT_FORM, onChange)
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
 
     const newForm = {
-      ...form,
+      ...data,
       [name]: value
     }
 
-    setForm(newForm)
+    onChange && onChange(newForm)
   }
   const [errors, _] = useState<Record<string, string>>({})
 
+  if (!data) return null
+
   return (
-    <Grid container>
-      <Grid item xs={12}>
+    <Grid container spacing={2}>
+      <Grid item xs={8}>
         <MyTextField
           required
           fullWidth
           label="Sub Heading"
           name="subHeading"
-          value={form.subHeading}
+          value={data?.subHeading}
           placeholder="Enter Sub Heading..."
           onChange={handleChangeInput}
           error={!!errors['subHeading']}
@@ -53,18 +54,41 @@ const HeroBannerModule: FC<{ data?: HeroBannerProps }> = ({ data }) => {
           fullWidth
           label="Heading"
           name="heading"
-          value={form.subHeading}
+          value={data?.heading}
           placeholder="Enter Heading..."
           onChange={handleChangeInput}
           error={!!errors['heading']}
           helperText={errors['heading']}
         />
         <TextEditor
-          value={form.content}
-          setValue={(value) => setForm((prev) => ({ ...prev, content: value }))}
+          value={data?.content}
+          setValue={(value) =>
+            onChange && onChange({ ...data, content: value })
+          }
           error={!!errors['content']}
           helperText={errors['content']}
         />
+      </Grid>
+
+      <Grid container item xs={4} spacing={2}>
+        <Grid item xs={12}>
+          <UploadImage
+            value={data?.rightImg}
+            onChange={(value) =>
+              onChange && onChange({ ...data, rightImg: value })
+            }
+            folder="upload"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <UploadImage
+            value={data?.background}
+            onChange={(value) =>
+              onChange && onChange({ ...data, background: value })
+            }
+            folder="upload"
+          />
+        </Grid>
       </Grid>
     </Grid>
   )

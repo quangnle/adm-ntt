@@ -1,18 +1,48 @@
-import ContentImageModule from '@/modules/content-image'
-import HeroBannerModule from '@/modules/hero-banner'
-import NewsLetterModule from '@/modules/news-letter'
+import configService from '@/api/config'
+import useFetchConfig from '@/hooks/useFetchConfig'
+import ComponentModule, { registerComponentType } from '@/modules'
 import { LoadingButton } from '@mui/lab'
 import { Paper, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Homepage() {
-  // const data = useFetchConfig('homepage')
-  // const [form, setForm] = useState()
+  const [config, _, fetchConfig] = useFetchConfig<{ components: [] }>(
+    'homepage'
+  )
+  const [form, setForm] = useState<
+    {
+      component: registerComponentType
+      data: object
+    }[]
+  >([])
+  useEffect(() => {
+    setForm(config?.value?.components || [])
+  }, [config])
   const [isCreating, setIsCreating] = useState(false)
 
+  const handleChangeComponentForm = <T extends object>(
+    index: number,
+    newData: T
+  ) => {
+    console.log(index, newData)
+    const newForm = [...form]
+    newForm[index].data = newData
+
+    setForm(newForm)
+  }
+
   const handleSubmitForm = async () => {
+    if (!config?.id) return
     try {
       setIsCreating(true)
+      const { data } = await configService.updateConfigWithKey(config.id, {
+        value: {
+          components: form
+        }
+      })
+      if (data) {
+        fetchConfig()
+      }
     } catch (error) {
       console.log(error)
     } finally {
@@ -25,26 +55,14 @@ export default function Homepage() {
         Homepage
       </Typography>
 
-      <Paper sx={{ py: 1, px: 2, mb: 2 }}>
-        <Typography variant="h5" mb={2}>
-          Hero Banner Module
-        </Typography>
-        <HeroBannerModule />
-      </Paper>
-
-      <Paper sx={{ py: 1, px: 2, mb: 2 }}>
-        <Typography variant="h5" mb={2}>
-          Content Image Module
-        </Typography>
-        <ContentImageModule />
-      </Paper>
-
-      <Paper sx={{ py: 1, px: 2, mb: 2 }}>
-        <Typography variant="h5" mb={2}>
-          News Letter Module
-        </Typography>
-        <NewsLetterModule />
-      </Paper>
+      {form?.map((comp, index) => (
+        <Paper key={index} sx={{ p: 2, mb: 4 }}>
+          <ComponentModule
+            {...comp}
+            onChange={(data) => handleChangeComponentForm(index, data)}
+          />
+        </Paper>
+      ))}
 
       <LoadingButton
         variant="contained"
