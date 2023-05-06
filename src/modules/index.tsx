@@ -32,7 +32,14 @@ export default function ComponentModule({
   component: registerComponentType
 } & ComponentModuleType) {
   const componentModule = registerComponents[component]
-  const compData = data as React.ComponentProps<typeof componentModule.comp>
-  console.log(component, compData)
+  const compData = data as
+    | (object & {
+        subHeading: string
+        heading: string
+        content: string
+        rightImg: string
+        background: string
+      })
+    | null
   return <componentModule.comp data={compData} onChange={onChange} />
 }
