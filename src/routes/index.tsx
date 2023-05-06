@@ -7,17 +7,17 @@ import PrivateRoute from './PrivateRoute'
 import Homepage from '@/pages/home'
 
 const internalRoutes = [
-  { name: 'Dashboard', path: '/', component: <Dashboard /> },
-  { name: 'Homepage', path: '/homepage', component: <Homepage /> }
+  { name: 'Dashboard', path: '/admin', component: <Dashboard /> },
+  { name: 'Homepage', path: '/admin/homepage', component: <Homepage /> }
 ]
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/admin/login" element={<Login />} />
 
       <Route
-        path="/"
+        path="/admin"
         element={
           <PrivateRoute>
             <AppMain />

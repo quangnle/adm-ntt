@@ -19,7 +19,7 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
   const handleClickLogout = () => {
     clearSession()
     dispatch(AuthActions.logout())
-    navigate('/login')
+    navigate('/admin/login')
   }
 
   return (

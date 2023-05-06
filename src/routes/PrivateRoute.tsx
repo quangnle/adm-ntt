@@ -17,7 +17,7 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
       const token = getToken()
 
       if (!token) {
-        navigate('/login', { replace: true })
+        navigate('/admin/login', { replace: true })
       } else {
         let profile: accountType
         AuthService.getMe()

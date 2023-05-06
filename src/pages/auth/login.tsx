@@ -28,7 +28,7 @@ export default function Login() {
 
   const navigate = useNavigate()
 
-  if (credential.isAuthenticated) return <Navigate to="/" />
+  if (credential.isAuthenticated) return <Navigate to="/admin" />
 
   const handleInputChange = (name: string, value: string) => {
     setForm((prev) => ({
@@ -46,7 +46,7 @@ export default function Login() {
       if (data.user) {
         dispatch(AuthActions.login({ ...data }))
 
-        navigate('/', { replace: true })
+        navigate('/admin', { replace: true })
       }
     } catch (error) {
       console.log(error)
