@@ -5,10 +5,12 @@ import Login from '@/pages/auth/login'
 import Dashboard from '@/pages/dashboard'
 import PrivateRoute from './PrivateRoute'
 import Homepage from '@/pages/home'
+import SettingPage from '@/pages/setting'
 
 const internalRoutes = [
   { name: 'Dashboard', path: '/admin', component: <Dashboard /> },
-  { name: 'Homepage', path: '/admin/homepage', component: <Homepage /> }
+  { name: 'Homepage', path: '/admin/homepage', component: <Homepage /> },
+  { name: 'Setting', path: '/admin/setting', component: <SettingPage /> }
 ]
 
 const AppRoutes = () => {

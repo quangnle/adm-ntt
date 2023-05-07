@@ -1,6 +1,13 @@
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography
+} from '@mui/material'
 import ContentImageModule from './content-image'
 import HeroBannerModule from './hero-banner'
 import NewsLetterModule from './news-letter'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const registerComponents = {
   HeroBannerModule: {
@@ -32,14 +39,18 @@ export default function ComponentModule({
   component: registerComponentType
 } & ComponentModuleType) {
   const componentModule = registerComponents[component]
-  const compData = data as
-    | (object & {
-        subHeading: string
-        heading: string
-        content: string
-        rightImg: string
-        background: string
-      })
-    | null
-  return <componentModule.comp data={compData} onChange={onChange} />
+  return (
+    <Accordion defaultExpanded>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography variant="h5">{componentModule?.name}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <componentModule.comp data={data as never} onChange={onChange} />
+      </AccordionDetails>
+    </Accordion>
+  )
 }

@@ -28,7 +28,7 @@ export default function AppSidebar() {
       >
         <Toolbar />
         <Divider />
-        {['Homepage', 'Preview'].map((text: string, index: number) => (
+        {['Homepage', 'Setting'].map((text: string, index: number) => (
           <ListItem key={text} disablePadding>
             <ListItemButton
               component={Link}

@@ -5,3 +5,8 @@ export type accountType = {
 }
 
 export type TDataType = 'string' | 'image' | 'video'
+
+export type ConfigType = {
+  id: number
+  value: never
+}

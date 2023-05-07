@@ -1,13 +1,13 @@
+import { useEffect, useState } from 'react'
 import configService from '@/api/config'
-import PreviewDrawer from '@/components/preview-drawer'
 import useFetchConfig from '@/hooks/useFetchConfig'
 import ComponentModule, { registerComponentType } from '@/modules'
 import { LoadingButton } from '@mui/lab'
-import { Paper, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { Box, Stack, Typography } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
 
 export default function Homepage() {
-  const [config, _, fetchConfig] = useFetchConfig<{ components: [] }>(
+  const [config, isFetching, fetchConfig] = useFetchConfig<{ components: [] }>(
     'homepage'
   )
   const [form, setForm] = useState<
@@ -51,30 +51,47 @@ export default function Homepage() {
     }
   }
   return (
-    <>
-      <Typography variant="h3" mb={2}>
-        Homepage
-      </Typography>
+    <Stack sx={{ width: '100%', pt: 2 }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography variant="h3" mb={2}>
+          Homepage
+        </Typography>
 
-      <PreviewDrawer width={600} url="https://ntt-solutions.techwiz.tech/" />
+        <LoadingButton
+          variant="contained"
+          size="large"
+          onClick={handleSubmitForm}
+          loading={isCreating}
+        >
+          Update
+        </LoadingButton>
+      </Stack>
 
-      {form?.map((comp, index) => (
-        <Paper key={index} sx={{ p: 2, mb: 4 }}>
-          <ComponentModule
-            {...comp}
-            onChange={(data) => handleChangeComponentForm(index, data)}
-          />
-        </Paper>
-      ))}
-
-      <LoadingButton
-        variant="contained"
-        sx={{ mx: 'auto', mt: 6 }}
-        onClick={handleSubmitForm}
-        loading={isCreating}
-      >
-        Update
-      </LoadingButton>
-    </>
+      {isFetching ? (
+        <>
+          <Box
+            sx={{
+              display: 'flex',
+              flex: 1,
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        </>
+      ) : (
+        <>
+          {form?.map((comp, index) => (
+            <ComponentModule
+              key={index}
+              {...comp}
+              onChange={(data) => handleChangeComponentForm(index, data)}
+            />
+          ))}
+        </>
+      )}
+    </Stack>
   )
 }
