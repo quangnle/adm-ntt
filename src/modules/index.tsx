@@ -8,7 +8,7 @@ import ContentImageModule from './content-image'
 import HeroBannerModule from './hero-banner'
 import NewsLetterModule from './news-letter'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ContactDetailModule from './contact-detail'
+import AboutUsModule from './about-us'
 
 const registerComponents = {
   HeroBannerModule: {
@@ -25,7 +25,7 @@ const registerComponents = {
   },
   ContactDetailModule: {
     name: 'Detail',
-    comp: ContactDetailModule
+    comp: AboutUsModule
   }
 }
 

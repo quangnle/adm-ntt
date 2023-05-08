@@ -7,10 +7,10 @@ const DEFAULT_FORM = {
   content: ''
 }
 
-type ContactDetailProps = typeof DEFAULT_FORM
-const ContactDetailModule: FC<
+type AboutUsProps = typeof DEFAULT_FORM
+const AboutUsModule: FC<
   ComponentModuleType & {
-    data?: ContactDetailProps | null
+    data?: AboutUsProps | null
   }
 > = ({ data, onChange }) => {
   const [errors, _] = useState<Record<string, string>>({})
@@ -30,4 +30,4 @@ const ContactDetailModule: FC<
   )
 }
 
-export default ContactDetailModule
+export default AboutUsModule

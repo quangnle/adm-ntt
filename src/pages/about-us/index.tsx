@@ -1,96 +1,71 @@
+import ComponentModule from '@/modules'
+import { LoadingButton } from '@mui/lab'
+import { Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import configService from '@/api/config'
-import useFetchConfig from '@/hooks/useFetchConfig'
-import ComponentModule, { registerComponentType } from '@/modules'
-import { LoadingButton } from '@mui/lab'
-import { Box, Stack, Typography } from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
 
-export default function AboutUsPage() {
-  const [config, isFetching, fetchConfig] = useFetchConfig<{ components: [] }>(
-    'homepage'
-  )
-  const [form, setForm] = useState<
-    {
-      component: registerComponentType
-      data: object
-    }[]
-  >([])
-  useEffect(() => {
-    setForm(config?.value?.components || [])
-  }, [config])
-  const [isCreating, setIsCreating] = useState(false)
+interface IDetailContact {
+  content: string
+}
 
-  const handleChangeComponentForm = <T extends object>(
-    index: number,
-    newData: T
-  ) => {
-    const newForm = [...form]
-    newForm[index].data = newData
-
-    setForm(newForm)
-  }
-
+export default function ContactPage() {
+  const [detail, setDetail] = useState<IDetailContact | null>(null)
+  const [configId, setConfigId] = useState<number | null>(null)
   const handleSubmitForm = async () => {
-    if (!config?.id) return
     try {
-      setIsCreating(true)
-      const { data } = await configService.updateConfigWithKey(config.id, {
+      if (!configId) return
+      const { data } = await configService.updateConfigWithKey(configId, {
         value: {
-          components: form
+          content: detail?.content
         }
       })
       if (data) {
-        fetchConfig()
+        setDetail({ content: data?.value?.content || '' })
       }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsCreating(false)
+    } catch (error: unknown) {
+      console.log(error as Error)
     }
   }
+  const handleChangeContent = async (data: IDetailContact) => {
+    setDetail(data)
+  }
+  const getContentDetail = async () => {
+    try {
+      const { data } = await configService.getConfigWithKey('about-us-detail')
+      setConfigId(Number(data?.id) || null)
+      const value = JSON.parse(data.value) as IDetailContact
+      if (value) {
+        setDetail(value)
+      }
+    } catch (error: unknown) {
+      console.log(error as Error)
+    }
+  }
+  useEffect(() => {
+    getContentDetail()
+  }, [])
   return (
     <Stack sx={{ width: '100%', pt: 2 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h3" mb={2}>
-          Homepage
+          About Us
         </Typography>
 
         <LoadingButton
           variant="contained"
           size="large"
           onClick={handleSubmitForm}
-          loading={isCreating}
+          loading={false}
         >
           Update
         </LoadingButton>
       </Stack>
 
-      {isFetching ? (
-        <>
-          <Box
-            sx={{
-              display: 'flex',
-              flex: 1,
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        </>
-      ) : (
-        <>
-          {form?.map((comp, index) => (
-            <ComponentModule
-              key={index}
-              {...comp}
-              onChange={(data) => handleChangeComponentForm(index, data)}
-            />
-          ))}
-        </>
-      )}
+      <ComponentModule
+        component="ContactDetailModule"
+        data={detail}
+        onChange={(data: IDetailContact) => handleChangeContent(data)}
+      />
     </Stack>
   )
 }
