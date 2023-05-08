@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import configService from '@/api/config'
 
 interface IDetailContact {
-  content: string
+  content?: string
 }
 
 export default function ContactPage() {
