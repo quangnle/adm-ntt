@@ -131,7 +131,7 @@ export default function Login() {
             >
               Sign In
             </Button>
-            <Typography align="center">NFT Gifting Admin Dashboard</Typography>
+            <Typography align="center">NTT Solution Admin Dashboard</Typography>
           </Box>
         </Box>
       </Grid>
