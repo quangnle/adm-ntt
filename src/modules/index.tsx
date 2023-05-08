@@ -32,7 +32,7 @@ const registerComponents = {
 export type registerComponentType = keyof typeof registerComponents
 
 export type ComponentModuleType = {
-  onChange: <T extends { content: string }>(data: T) => void | Promise<void>
+  onChange: <T extends { content?: string }>(data: T) => void | Promise<void>
   data: object | null
 }
 

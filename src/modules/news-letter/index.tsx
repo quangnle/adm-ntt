@@ -6,7 +6,8 @@ import { ComponentModuleType } from '..'
 const DEFAULT_FORM = {
   heading: '',
   subHeading: '',
-  background: ''
+  background: '',
+  content: ''
 }
 
 type ContentImageProps = typeof DEFAULT_FORM
