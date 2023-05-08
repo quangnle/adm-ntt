@@ -24,8 +24,6 @@ export default function UpdateConfig({ data }: { data: ConfigType }) {
   const [creating, setCreating] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 
-  console.log(data)
-
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
 
