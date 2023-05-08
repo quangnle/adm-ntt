@@ -6,7 +6,7 @@ import { LoadingButton } from '@mui/lab'
 import { Box, Stack, Typography } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 
-export default function Homepage() {
+export default function AboutUsPage() {
   const [config, isFetching, fetchConfig] = useFetchConfig<{ components: [] }>(
     'homepage'
   )

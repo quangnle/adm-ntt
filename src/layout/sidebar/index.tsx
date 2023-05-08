@@ -6,10 +6,26 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import ContactPageIcon from '@mui/icons-material/ContactPage'
 import Toolbar from '@mui/material/Toolbar'
+import InfoIcon from '@mui/icons-material/Info'
 import { Link } from 'react-router-dom'
 
 const drawerWidth = 240
+
+interface IMenus {
+  [key: string]: {
+    value: string
+    icon: JSX.Element
+  }
+}
+
+const menus: IMenus = {
+  setting: { value: 'General Settings', icon: <InboxIcon /> },
+  homepage: { value: 'Homepage', icon: <MailIcon /> },
+  contact: { value: 'Contact Page', icon: <ContactPageIcon /> },
+  'about-us': { value: 'About Us Page', icon: <InfoIcon /> }
+}
 
 export default function AppSidebar() {
   return (
@@ -28,16 +44,14 @@ export default function AppSidebar() {
       >
         <Toolbar />
         <Divider />
-        {['Homepage', 'Setting'].map((text: string, index: number) => (
+        {Object.keys(menus).map((text: string) => (
           <ListItem key={text} disablePadding>
             <ListItemButton
               component={Link}
               to={`/admin/${text.toLowerCase()}`}
             >
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemIcon>{menus[text].icon}</ListItemIcon>
+              <ListItemText primary={menus[text].value} />
             </ListItemButton>
           </ListItem>
         ))}
