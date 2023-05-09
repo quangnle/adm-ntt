@@ -33,7 +33,7 @@ const TextEditor = ({
       const file = input.files?.[0]
       if (editor && file && /^image\//.test(file.type)) {
         const formData = new FormData()
-        formData.append('folder', 'post')
+        formData.append('module', 'post')
         formData.append('file', file)
         const { data } = await uploadService.uploadFile(formData) // upload data into server or aws or cloudinary
         const url = data?.location
