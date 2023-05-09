@@ -5,14 +5,14 @@ import { FormHelperText } from '@mui/material'
 type UploadImageType = {
   value?: string
   onChange: (_: string) => void
-  folder: string
+  module: string
   imageAspect?: string
 } & FormComponentError
 
 const UploadImage = ({
   value,
   onChange,
-  folder,
+  module,
   imageAspect = '3/2',
   error,
   helperText
@@ -21,7 +21,7 @@ const UploadImage = ({
     const file = e.target.files?.length && e.target.files[0]
     if (file && /^image\//.test(file.type)) {
       const formData = new FormData()
-      formData.append('module', folder)
+      formData.append('module', module)
       formData.append('file', file)
 
       const { data } = await uploadService.uploadFile(formData)
