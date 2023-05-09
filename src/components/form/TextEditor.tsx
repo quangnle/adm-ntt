@@ -36,7 +36,7 @@ const TextEditor = ({
         formData.append('module', 'post')
         formData.append('file', file)
         const { data } = await uploadService.uploadFile(formData) // upload data into server or aws or cloudinary
-        const url = data?.location
+        const url = data?.secure_url
         const selection = editor.getSelection()?.index
         if (selection) editor.insertEmbed(selection, 'image', url)
       } else {
