@@ -7,7 +7,14 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { getListForm } from '@/api/form'
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { deleteListForm, getListForm } from '@/api/form'
 
 type IForm = {
   id: number
@@ -32,7 +39,31 @@ export default function ListFormPage() {
   }
 
   const [form, setForm] = useState<IForm[]>([])
+  const [open, setOpen] = useState(false)
+  const [idSubciberCurrent, setIdSubciberCurrent] = useState<{
+    id: number
+    email: string
+  }>()
 
+  const handleClickOpen = (id: number, email: string) => {
+    setOpen(true)
+    setIdSubciberCurrent({ id: id, email })
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const onDeleteSubcriber = async () => {
+    try {
+      if (idSubciberCurrent?.id) {
+        await deleteListForm(idSubciberCurrent?.id)
+        location.reload()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const fetchApi = async () => {
     try {
       const { data } = await getListForm()
@@ -89,6 +120,9 @@ export default function ListFormPage() {
                 <TableCell align="left" style={{ color: 'white' }}>
                   Date Created
                 </TableCell>
+                <TableCell align="center" style={{ color: 'white' }}>
+                  Delete
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -106,12 +140,46 @@ export default function ListFormPage() {
                   <TableCell align="left">
                     {new Date(row?.created_at).toLocaleDateString()}
                   </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleClickOpen(row?.id, row?.email)}
+                  >
+                    <DeleteIcon />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Stack>
+      <div>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {'Delete Subscriber!'}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure ? Remove this message of
+              <span style={{ color: 'seagreen', paddingLeft: '5px' }}>
+                {idSubciberCurrent?.email}
+              </span>
+              ?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Disagree</Button>
+            <Button onClick={onDeleteSubcriber} autoFocus>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </Stack>
   )
 }

@@ -106,6 +106,7 @@ export default function ListEmailPage() {
                   </TableCell>
                   <TableCell
                     align="center"
+                    style={{ cursor: 'pointer' }}
                     onClick={() => handleClickOpen(row?.id, row?.email)}
                   >
                     <DeleteIcon />
