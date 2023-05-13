@@ -26,7 +26,7 @@ const registerComponents = {
     comp: NewsLetterModule
   },
   ContactDetailModule: {
-    name: 'Detail About Us',
+    name: 'About Us Detail',
     comp: AboutUsModule
   },
   ValuesToCustomer: {
