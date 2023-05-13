@@ -24,7 +24,8 @@ const menus: IMenus = {
   setting: { value: 'General Settings', icon: <InboxIcon /> },
   homepage: { value: 'Homepage', icon: <MailIcon /> },
   contact: { value: 'Contact Page', icon: <ContactPageIcon /> },
-  'about-us': { value: 'About Us Page', icon: <InfoIcon /> }
+  'about-us': { value: 'About Us Page', icon: <InfoIcon /> },
+  'list-form': { value: 'List Form Page', icon: <MailIcon /> }
 }
 
 export default function AppSidebar() {
