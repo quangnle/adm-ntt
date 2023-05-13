@@ -10,6 +10,7 @@ import ContactPageIcon from '@mui/icons-material/ContactPage'
 import Toolbar from '@mui/material/Toolbar'
 import InfoIcon from '@mui/icons-material/Info'
 import DescriptionIcon from '@mui/icons-material/Description'
+import HomeIcon from '@mui/icons-material/Home'
 import { Link } from 'react-router-dom'
 
 const drawerWidth = 240
@@ -23,10 +24,11 @@ interface IMenus {
 
 const menus: IMenus = {
   setting: { value: 'General Settings', icon: <InboxIcon /> },
-  homepage: { value: 'Homepage', icon: <MailIcon /> },
-  contact: { value: 'Contact Page', icon: <ContactPageIcon /> },
-  'about-us': { value: 'About Us Page', icon: <InfoIcon /> },
-  'list-form': { value: 'List Form Page', icon: <DescriptionIcon /> }
+  homepage: { value: 'Home', icon: <HomeIcon /> },
+  contact: { value: 'Contact', icon: <ContactPageIcon /> },
+  'about-us': { value: 'About Us', icon: <InfoIcon /> },
+  'list-form': { value: 'List Form', icon: <DescriptionIcon /> },
+  'list-email': { value: 'List Email', icon: <MailIcon /> }
 }
 
 export default function AppSidebar() {
