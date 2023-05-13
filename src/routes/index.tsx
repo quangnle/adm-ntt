@@ -9,6 +9,7 @@ import SettingPage from '@/pages/setting'
 import ContactPage from '@/pages/contact'
 import AboutUsPage from '@/pages/about-us'
 import ListFormPage from '@/pages/list-form'
+import ListEmailPage from '@/pages/list-email'
 
 const internalRoutes = [
   { name: 'Dashboard', path: '/admin', component: <Dashboard /> },
@@ -16,7 +17,8 @@ const internalRoutes = [
   { name: 'Setting', path: '/admin/setting', component: <SettingPage /> },
   { name: 'Contact', path: '/admin/contact', component: <ContactPage /> },
   { name: 'AboutUs', path: '/admin/about-us', component: <AboutUsPage /> },
-  { name: 'ListForm', path: '/admin/list-form', component: <ListFormPage /> }
+  { name: 'ListForm', path: '/admin/list-form', component: <ListFormPage /> },
+  { name: 'ListEmail', path: '/admin/list-email', component: <ListEmailPage /> }
 ]
 
 const AppRoutes = () => {
