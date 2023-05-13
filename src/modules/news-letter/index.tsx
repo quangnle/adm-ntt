@@ -3,7 +3,7 @@ import { Grid } from '@mui/material'
 import { FC, useState } from 'react'
 import { ComponentModuleType } from '..'
 
-const DEFAULT_FORM = {
+const DEFAULT_FORM: Record<string, string> = {
   heading: '',
   subHeading: '',
   background: '',

@@ -3,7 +3,7 @@ import { Grid } from '@mui/material'
 import { FC, useState } from 'react'
 import { ComponentModuleType } from '..'
 
-const DEFAULT_FORM = {
+const DEFAULT_FORM: Record<string, string> = {
   content: ''
 }
 
@@ -15,8 +15,8 @@ const AboutUsModule: FC<
 > = ({ data, onChange }) => {
   const [errors, _] = useState<Record<string, string>>({})
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={8}>
+    <Grid container>
+      <Grid item xs={12}>
         <TextEditor
           value={data?.content}
           setValue={(value) =>

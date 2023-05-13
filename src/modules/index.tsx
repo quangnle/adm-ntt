@@ -9,6 +9,7 @@ import HeroBannerModule from './hero-banner'
 import NewsLetterModule from './news-letter'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AboutUsModule from './about-us'
+import ValuesToCustomerModule, { IValueCustomerForm } from './values-customer'
 
 const registerComponents = {
   HeroBannerModule: {
@@ -24,16 +25,20 @@ const registerComponents = {
     comp: NewsLetterModule
   },
   ContactDetailModule: {
-    name: 'Detail',
+    name: 'Detail About Us',
     comp: AboutUsModule
+  },
+  ValuesToCustomer: {
+    name: 'Values To Customer',
+    comp: ValuesToCustomerModule
   }
 }
 
 export type registerComponentType = keyof typeof registerComponents
 
 export type ComponentModuleType = {
-  onChange: <T extends { content?: string }>(data: T) => void | Promise<void>
-  data: object | null
+  onChange: (data: unknown) => void | Promise<void>
+  data: Record<string, string>
 }
 
 export default function ComponentModule({
@@ -55,17 +60,7 @@ export default function ComponentModule({
       </AccordionSummary>
       <AccordionDetails>
         <componentModule.comp
-          data={
-            data as
-              | (object & {
-                  subHeading: string
-                  heading: string
-                  content: string
-                  rightImg: string
-                  background: string
-                })
-              | null
-          }
+          data={data as unknown as Record<string, string> & IValueCustomerForm}
           onChange={onChange}
         />
       </AccordionDetails>

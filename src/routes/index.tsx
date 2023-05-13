@@ -26,14 +26,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/admin/login" element={<Login />} />
 
-      <Route
-        path="/admin"
-        element={
-          <PrivateRoute>
-            <AppMain />
-          </PrivateRoute>
-        }
-      >
+      <Route path="/admin" element={<AppMain />}>
         {internalRoutes?.map((route) => (
           <Route
             key={route.path}
