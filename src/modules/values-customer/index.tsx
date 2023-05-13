@@ -5,12 +5,12 @@ import {
   AccordionSummary,
   Button,
   Grid,
-  TextareaAutosize,
   Typography
 } from '@mui/material'
 import { FC, useState } from 'react'
 import { ComponentModuleType } from '..'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import TextEditor from '@/components/form/TextEditor'
 
 type TValueItemField = 'icon' | 'title' | 'description'
 
@@ -43,8 +43,13 @@ const ValuesToCustomerModule: FC<
   const handleChangeItem = (
     field: TValueItemField,
     index: number,
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string
   ) => {
+    if (typeof event === 'string') {
+      data.items[index][field as unknown as TValueItemField] = event
+      onChange && onChange(data)
+      return
+    }
     const { value } = event.target
     data.items[index][field as unknown as TValueItemField] = value
     onChange && onChange(data)
@@ -121,21 +126,13 @@ const ValuesToCustomerModule: FC<
                     error={!!errors[`Title-${idx + 1}`]}
                     helperText={errors[`Title-${idx + 1}`]}
                   />
-                  <TextareaAutosize
-                    style={{
-                      width: '100%',
-                      resize: 'none',
-                      padding: '1rem',
-                      fontSize: '1rem',
-                      fontFamily: 'Roboto, Helvetica, Arial, sans-serif'
-                    }}
-                    required
-                    value={item?.description || ''}
-                    placeholder="Enter Description..."
-                    minRows={5}
-                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
-                      handleChangeItem('description', idx, event)
+                  <TextEditor
+                    value={item.description}
+                    setValue={(value) =>
+                      handleChangeItem('description', idx, value)
                     }
+                    error={!!errors['content']}
+                    helperText={errors['content']}
                   />
                   <Button color="error" onClick={() => onHandleDelete(idx)}>
                     Delete
