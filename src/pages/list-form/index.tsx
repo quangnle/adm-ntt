@@ -40,24 +40,24 @@ export default function ListFormPage() {
 
   const [form, setForm] = useState<IForm[]>([])
   const [open, setOpen] = useState(false)
-  const [idSubciberCurrent, setIdSubciberCurrent] = useState<{
+  const [idSubscriberCurrent, setIdSubscriberCurrent] = useState<{
     id: number
     email: string
   }>()
 
   const handleClickOpen = (id: number, email: string) => {
     setOpen(true)
-    setIdSubciberCurrent({ id: id, email })
+    setIdSubscriberCurrent({ id: id, email })
   }
 
   const handleClose = () => {
     setOpen(false)
   }
 
-  const onDeleteSubcriber = async () => {
+  const onDeleteSubscriber = async () => {
     try {
-      if (idSubciberCurrent?.id) {
-        await deleteListForm(idSubciberCurrent?.id)
+      if (idSubscriberCurrent?.id) {
+        await deleteListForm(idSubscriberCurrent?.id)
         location.reload()
       }
     } catch (error) {
@@ -67,7 +67,6 @@ export default function ListFormPage() {
   const fetchApi = async () => {
     try {
       const { data } = await getListForm()
-      console.log(data)
       const newForm = data.map((item: IForm) =>
         createData(
           item?.id,
@@ -121,7 +120,7 @@ export default function ListFormPage() {
                   Date Created
                 </TableCell>
                 <TableCell align="center" style={{ color: 'white' }}>
-                  Delete
+                  Action
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -167,14 +166,14 @@ export default function ListFormPage() {
             <DialogContentText id="alert-dialog-description">
               Are you sure ? Remove this message of
               <span style={{ color: 'seagreen', paddingLeft: '5px' }}>
-                {idSubciberCurrent?.email}
+                {idSubscriberCurrent?.email}
               </span>
               ?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Disagree</Button>
-            <Button onClick={onDeleteSubcriber} autoFocus>
+            <Button onClick={onDeleteSubscriber} autoFocus>
               Agree
             </Button>
           </DialogActions>

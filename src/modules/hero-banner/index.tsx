@@ -5,7 +5,8 @@ import { Grid } from '@mui/material'
 import { FC, useState } from 'react'
 import { ComponentModuleType } from '..'
 
-const DEFAULT_FORM = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DEFAULT_FORM: Record<string, string> = {
   subHeading: '',
   heading: '',
   content: '',
