@@ -69,20 +69,35 @@ export default function ListFormPage() {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
+            <TableHead style={{ background: 'black' }}>
               <TableRow>
-                <TableCell>id</TableCell>
-                <TableCell align="left">Email</TableCell>
-                <TableCell align="left">Subject</TableCell>
-                <TableCell align="left">Message</TableCell>
-                <TableCell align="left">Phone</TableCell>
-                <TableCell align="left">Date Created</TableCell>
-                <TableCell align="left">Date Updated</TableCell>
+                <TableCell align="left" style={{ color: 'white' }}>
+                  ID
+                </TableCell>
+                <TableCell align="left" style={{ color: 'white' }}>
+                  Email
+                </TableCell>
+                <TableCell align="left" style={{ color: 'white' }}>
+                  Subject
+                </TableCell>
+                <TableCell align="left" style={{ color: 'white' }}>
+                  Message
+                </TableCell>
+                <TableCell align="left" style={{ color: 'white' }}>
+                  Phone
+                </TableCell>
+                <TableCell align="left" style={{ color: 'white' }}>
+                  Date Created
+                </TableCell>
+                <TableCell align="left" style={{ color: 'white' }}>
+                  Date Updated
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {form.map((row) => (
+              {form.map((row, index) => (
                 <TableRow
+                  style={{ background: index % 2 == 0 ? '#edeef0' : '' }}
                   key={row?.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
