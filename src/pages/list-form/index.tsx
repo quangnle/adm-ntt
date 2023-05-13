@@ -89,9 +89,6 @@ export default function ListFormPage() {
                 <TableCell align="left" style={{ color: 'white' }}>
                   Date Created
                 </TableCell>
-                <TableCell align="left" style={{ color: 'white' }}>
-                  Date Updated
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -106,8 +103,9 @@ export default function ListFormPage() {
                   <TableCell align="left">{row?.subject}</TableCell>
                   <TableCell align="left">{row?.body}</TableCell>
                   <TableCell align="left">{row?.phone}</TableCell>
-                  <TableCell align="left">{row?.created_at}</TableCell>
-                  <TableCell align="left">{row?.updated_at}</TableCell>
+                  <TableCell align="left">
+                    {new Date(row?.created_at).toLocaleDateString()}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
