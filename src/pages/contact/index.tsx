@@ -8,12 +8,16 @@ import { IItemValues } from '@/modules/values-customer'
 interface IDetailContact {
   heading: string
   description: string
+  formHeading: string
+  formDescription: string
   items: IItemValues[]
 }
 
 let DEFAULT_FORM: IDetailContact = {
   description: '',
   heading: '',
+  formHeading: '',
+  formDescription: '',
   items: []
 }
 
@@ -28,6 +32,8 @@ export default function ContactPage() {
           value: {
             heading: detail.heading,
             description: detail.description,
+            formHeading: detail.formHeading,
+            formDescription: detail.formDescription,
             items: detail.items
           }
         })
@@ -42,7 +48,9 @@ export default function ContactPage() {
       return {
         ...prev,
         heading: data.heading,
-        description: data.description
+        description: data.description,
+        formHeading: data.formHeading,
+        formDescription: data.formDescription
       }
     })
   }

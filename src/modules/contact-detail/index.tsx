@@ -23,6 +23,8 @@ export interface IItemValues {
 export interface IContactDetailForm {
   heading: string
   description: string | undefined
+  formHeading: string
+  formDescription: string | undefined
   items: IItemValues[]
 }
 
@@ -32,12 +34,11 @@ const ContactDetailModule: FC<
     onChange: (data: unknown) => void
   }
 > = ({ data, onChange }) => {
-  console.log(data)
   const handleChangeInput = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { value } = event.target
-    data.heading = value
+    const { name, value } = event.target
+    data[name] = value
     onChange && onChange(data)
   }
 
@@ -164,6 +165,39 @@ const ContactDetailModule: FC<
         <Button sx={{ mt: 2 }} onClick={onHandleNewItem}>
           New Item
         </Button>
+        <Accordion defaultExpanded>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-form-header"
+          >
+            <Typography variant="h5">Form</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <MyTextField
+              required
+              fullWidth
+              label="formHeading"
+              name="formHeading"
+              value={data?.formHeading}
+              placeholder="Enter formHeading..."
+              onChange={handleChangeInput}
+              error={!!errors['formHeading']}
+              helperText={errors['formHeading']}
+            />
+            <MyTextField
+              required
+              fullWidth
+              label="formDescription"
+              name="formDescription"
+              value={data?.formDescription}
+              placeholder="Enter formDescription..."
+              onChange={handleChangeInput}
+              error={!!errors['formDescription']}
+              helperText={errors['formDescription']}
+            />
+          </AccordionDetails>
+        </Accordion>
       </Grid>
     </Grid>
   )
