@@ -10,10 +10,12 @@ import ContactPage from '@/pages/contact'
 import AboutUsPage from '@/pages/about-us'
 import ListFormPage from '@/pages/list-form'
 import ListEmailPage from '@/pages/list-email'
+import ProductPage from '@/pages/product'
 
 const internalRoutes = [
   { name: 'Dashboard', path: '/admin', component: <Dashboard /> },
   { name: 'Homepage', path: '/admin/homepage', component: <Homepage /> },
+  { name: 'Products', path: '/admin/products', component: <ProductPage /> },
   { name: 'Setting', path: '/admin/setting', component: <SettingPage /> },
   { name: 'Contact', path: '/admin/contact', component: <ContactPage /> },
   { name: 'AboutUs', path: '/admin/about-us', component: <AboutUsPage /> },

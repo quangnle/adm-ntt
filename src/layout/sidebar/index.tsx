@@ -25,6 +25,7 @@ interface IMenus {
 const menus: IMenus = {
   setting: { value: 'General Settings', icon: <InboxIcon /> },
   homepage: { value: 'Home', icon: <HomeIcon /> },
+  products: { value: 'Products', icon: <HomeIcon /> },
   contact: { value: 'Contact', icon: <ContactPageIcon /> },
   'about-us': { value: 'About Us', icon: <InfoIcon /> },
   'list-form': { value: 'List Form', icon: <DescriptionIcon /> },
