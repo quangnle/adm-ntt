@@ -13,7 +13,7 @@ export default function Homepage() {
   const [form, setForm] = useState<
     {
       component: registerComponentType
-      data: object
+      data: Record<string, string>
     }[]
   >([])
   useEffect(() => {
@@ -21,9 +21,9 @@ export default function Homepage() {
   }, [config])
   const [isCreating, setIsCreating] = useState(false)
 
-  const handleChangeComponentForm = <T extends object>(
+  const handleChangeComponentForm = (
     index: number,
-    newData: T
+    newData: Record<string, string>
   ) => {
     const newForm = [...form]
     newForm[index].data = newData
@@ -86,7 +86,9 @@ export default function Homepage() {
             <ComponentModule
               key={index}
               {...comp}
-              onChange={(data) => handleChangeComponentForm(index, data)}
+              onChange={(data: unknown) =>
+                handleChangeComponentForm(index, data as Record<string, string>)
+              }
             />
           ))}
         </>

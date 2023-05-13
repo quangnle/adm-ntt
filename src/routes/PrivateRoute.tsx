@@ -15,7 +15,6 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   useEffect(() => {
     if (!credential.isAuthenticated) {
       const token = getToken()
-
       if (!token) {
         navigate('/admin/login', { replace: true })
       } else {

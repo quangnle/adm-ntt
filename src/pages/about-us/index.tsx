@@ -3,40 +3,70 @@ import { LoadingButton } from '@mui/lab'
 import { Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import configService from '@/api/config'
+import { IItemValues } from '@/modules/values-customer'
 
 interface IDetailContact {
   content?: string
+  heading: string
+  items: IItemValues[]
 }
 
-export default function ContactPage() {
-  const [detail, setDetail] = useState<IDetailContact | null>(null)
-  const [configId, setConfigId] = useState<number | null>(null)
+const DEFAULT_FORM: IDetailContact = {
+  content: '',
+  heading: '',
+  items: []
+}
+
+export default function AboutUsPage() {
+  const [detail, setDetail] = useState<IDetailContact>(DEFAULT_FORM)
+  const [configIdDetail, setConfigDetailId] = useState<number | null>(null)
+  const [configIdValue, setConfigValueId] = useState<number | null>(null)
   const handleSubmitForm = async () => {
     try {
-      if (!configId) return
-      const { data } = await configService.updateConfigWithKey(configId, {
-        value: {
-          content: detail?.content
-        }
-      })
-      if (data) {
-        setDetail({ content: data?.value?.content || '' })
-      }
+      if (!configIdDetail || !configIdValue) return
+      await Promise.all([
+        configService.updateConfigWithKey(configIdDetail, {
+          value: {
+            content: detail?.content
+          }
+        }),
+        configService.updateConfigWithKey(configIdValue, {
+          value: {
+            heading: detail.heading,
+            items: detail.items
+          }
+        })
+      ])
     } catch (error: unknown) {
       console.log(error as Error)
     }
   }
   const handleChangeContent = async (data: IDetailContact) => {
-    setDetail(data)
+    setDetail((prev) => {
+      return {
+        ...prev,
+        content: data.content || ''
+      }
+    })
   }
   const getContentDetail = async () => {
     try {
-      const { data } = await configService.getConfigWithKey('about-us-detail')
-      setConfigId(Number(data?.id) || null)
-      const value = JSON.parse(data.value) as IDetailContact
-      if (value) {
-        setDetail(value)
+      const [resAboutUsDetail, resValuesCustomer] = await Promise.all([
+        configService.getConfigWithKey('about-us-detail'),
+        configService.getConfigWithKey('about-us-values-customer')
+      ])
+      const contentDetail = JSON.parse(resAboutUsDetail?.data.value)
+      if (typeof contentDetail !== 'undefined') {
+        DEFAULT_FORM.content = contentDetail.content
       }
+      const contentValuesCustomer = JSON.parse(resValuesCustomer?.data.value)
+      if (typeof contentValuesCustomer !== 'undefined') {
+        DEFAULT_FORM.heading = contentValuesCustomer.heading
+        DEFAULT_FORM.items = contentValuesCustomer.items
+      }
+      setConfigDetailId(Number(resAboutUsDetail?.data?.id) || null)
+      setConfigValueId(Number(resValuesCustomer?.data?.id) || null)
+      setDetail(DEFAULT_FORM)
     } catch (error: unknown) {
       console.log(error as Error)
     }
@@ -63,8 +93,17 @@ export default function ContactPage() {
 
       <ComponentModule
         component="ContactDetailModule"
-        data={detail}
-        onChange={(data: IDetailContact) => handleChangeContent(data)}
+        data={detail as unknown as Record<string, string>}
+        onChange={(data: unknown) =>
+          handleChangeContent(data as unknown as IDetailContact)
+        }
+      />
+      <ComponentModule
+        component="ValuesToCustomer"
+        data={detail as unknown as Record<string, string>}
+        onChange={(data: unknown) =>
+          handleChangeContent(data as unknown as IDetailContact)
+        }
       />
     </Stack>
   )

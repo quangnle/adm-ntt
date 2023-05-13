@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import moment from 'moment'
 import { Stack, Typography } from '@mui/material'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -85,10 +86,10 @@ export default function ListEmailPage() {
                   Email
                 </TableCell>
                 <TableCell align="left" style={{ color: 'white' }}>
-                  Date Created
+                  Date
                 </TableCell>
                 <TableCell align="center" style={{ color: 'white' }}>
-                  Delete
+                  Action
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -102,7 +103,7 @@ export default function ListEmailPage() {
                   <TableCell align="left">{row?.id}</TableCell>
                   <TableCell align="left">{row?.email}</TableCell>
                   <TableCell align="left">
-                    {new Date(row?.created_at).toLocaleDateString()}
+                    {moment(row?.created_at).format('MMMM Do YYYY, h:mm:ss A')}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -137,9 +138,9 @@ export default function ListEmailPage() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
+            <Button onClick={handleClose}>No</Button>
             <Button onClick={onDeleteSubcriber} autoFocus>
-              Agree
+              Yes
             </Button>
           </DialogActions>
         </Dialog>
