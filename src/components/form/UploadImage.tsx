@@ -1,6 +1,6 @@
 import uploadService from '@/api/upload'
 import { FormComponentError } from './type'
-import { FormHelperText, FormLabel, InputLabel } from '@mui/material'
+import { FormHelperText, FormLabel } from '@mui/material'
 
 type UploadImageType = {
   label?: string

@@ -20,7 +20,7 @@ export default function ChangeLogo({ data }: { data: ConfigType }) {
     try {
       setCreating(true)
 
-      const res = await configService.updateConfigWithKey(data?.id, {
+      await configService.updateConfigWithKey(data?.id, {
         value: form
       })
     } catch (error) {
