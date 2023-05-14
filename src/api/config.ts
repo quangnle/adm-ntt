@@ -1,6 +1,23 @@
 import axios from 'axios'
 
-export const getConfigWithKey = async (key: string) =>
+export type TKeyConfig =
+  | 'footer'
+  | 'layout'
+  | 'contact'
+  | 'homepage'
+  | 'about-us'
+  | 'logo'
+  | 'footer_menus'
+  | 'navbar_menus'
+  | 'about-us-detail'
+  | 'value-to-customer'
+  | 'products'
+  | 'about-us-values-customer'
+  | 'contact-detail'
+  | 'debug'
+  | 'maintenance'
+
+export const getConfigWithKey = async (key: TKeyConfig) =>
   axios.get(`/config/key/${key}`)
 
 export const createConfig = async <T extends object>(payload: {
