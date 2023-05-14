@@ -1,0 +1,19 @@
+name: GH-CI/CD
+on:
+  push:
+    branches: [ "develop" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{github.event.after}}
+      - name: Build file
+        run: |
+          npm install && npm run build
+      - name: deploy CD
+        run: |
+          curl -H 'Content-Type: application/json' -d '{"t":"C7RWBPVF0vf4F7LgCGyvURUPFZW8gZf9648rcnKkD2SvLZb7An606rl3Bm7v3xzR"}' -X POST http://139.180.137.195:3300/deploy

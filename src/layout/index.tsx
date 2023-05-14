@@ -19,7 +19,7 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
   const handleClickLogout = () => {
     clearSession()
     dispatch(AuthActions.logout())
-    navigate('/login')
+    navigate('/admin/login')
   }
 
   return (
@@ -54,7 +54,13 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
 
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', pt: 8 }}
+        sx={{
+          p: 2,
+          flexGrow: 1,
+          bgcolor: 'background.default',
+          pt: 8,
+          minHeight: '100vh'
+        }}
       >
         {children}
       </Box>

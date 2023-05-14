@@ -9,15 +9,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Checkbox from '@mui/material/Checkbox'
 import CssBaseline from '@mui/material/CssBaseline'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { useSnackbar } from 'notistack'
 
 export default function Login() {
+  const { enqueueSnackbar } = useSnackbar()
   const [form, setForm] = useState({
     username: 'admin',
     password: '123456'
@@ -28,7 +28,7 @@ export default function Login() {
 
   const navigate = useNavigate()
 
-  if (credential.isAuthenticated) return <Navigate to="/" />
+  if (credential.isAuthenticated) return <Navigate to="/admin/setting" />
 
   const handleInputChange = (name: string, value: string) => {
     setForm((prev) => ({
@@ -45,10 +45,14 @@ export default function Login() {
       const { data } = await authService.login(payload)
       if (data.user) {
         dispatch(AuthActions.login({ ...data }))
+        enqueueSnackbar('Login successfully!', { variant: 'success' })
 
-        navigate('/', { replace: true })
+        navigate('/admin', { replace: true })
+      } else {
+        enqueueSnackbar('Login failed!', { variant: 'error' })
       }
     } catch (error) {
+      enqueueSnackbar('Login failed!', { variant: 'error' })
       console.log(error)
     }
   }
@@ -119,10 +123,6 @@ export default function Login() {
                 handleInputChange('password', event.target.value)
               }
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -131,7 +131,7 @@ export default function Login() {
             >
               Sign In
             </Button>
-            <Typography align="center">NFT Gifting Admin Dashboard</Typography>
+            <Typography align="center">NTT Solution Admin Dashboard</Typography>
           </Box>
         </Box>
       </Grid>

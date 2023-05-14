@@ -15,6 +15,20 @@ export const convertErrorYup = (error: ValidationError) => {
   return errors
 }
 
+export const mergePattern = <T extends object, K extends object>(
+  pattern: T,
+  obj: K
+) => {
+  return Object.keys(pattern)?.reduce(
+    (result, objKey) => ({
+      ...result,
+      [objKey]: obj[objKey as keyof K]
+    }),
+    {}
+  )
+}
+
 export default {
-  convertErrorYup
+  convertErrorYup,
+  mergePattern
 }
