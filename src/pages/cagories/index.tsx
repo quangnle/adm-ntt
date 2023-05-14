@@ -4,22 +4,17 @@ import {
   Button,
   Drawer,
   IconButton,
-  MenuItem,
   Pagination,
-  SelectChangeEvent,
   Stack,
   Typography
 } from '@mui/material'
-import { IGroup, ICategory } from '@/constants/types'
-import CustomSelect from '@/components/form/CustomSelect'
-import { useLocation } from 'react-router-dom'
+import { ICategory } from '@/constants/types'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import useDrawer from '@/hooks/useDrawer'
+import CreateProduct from './create'
 import categoryService from '@/api/category'
-import groupService from '@/api/group'
-import CreateGroup from './create'
 
 const DEFAULT_PAGINATION = {
   page: 1,
@@ -27,16 +22,13 @@ const DEFAULT_PAGINATION = {
   perPage: 10
 }
 
-export default function GroupPage() {
-  const location = useLocation()
-
+export default function CategoryPage() {
   const [categoriesList, setCategoriesList] = useState<ICategory[]>([])
-  const [categoryId, setCategoryId] = useState(0)
-
-  const [groupList, setGroupList] = useState<IGroup[]>([])
   const [pagination, setPagination] = useState(DEFAULT_PAGINATION)
 
-  const [selectedProduct, setSelectProduct] = useState<IGroup | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null
+  )
   const [selectedIds, setSelectedIds] = useState<number[]>([])
 
   const [showDrawer, toggleDrawer, setShowDrawer] = useDrawer()
@@ -51,14 +43,14 @@ export default function GroupPage() {
       console.log(error)
     }
   }
-
+  console.log(showDrawer)
   const deleteGroups = async () => {
     try {
-      const fetchData = await groupService.deleteMany({
+      const fetchData = await categoryService.deleteMany({
         ids: selectedIds
       })
       if (fetchData) {
-        fetchGroup()
+        fetchCategories()
       }
     } catch (error) {
       console.log(error)
@@ -67,28 +59,11 @@ export default function GroupPage() {
 
   const deleteOneGroup = async (selectedId: number) => {
     try {
-      const fetchData = await groupService.deleteMany({
+      const fetchData = await categoryService.deleteMany({
         ids: [selectedId]
       })
       if (fetchData) {
-        fetchGroup()
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const fetchGroup = async () => {
-    try {
-      const fetchData = await groupService.getAll({
-        category_id: categoryId == 0 ? undefined : categoryId,
-        page: pagination.page,
-        per_page: pagination.perPage
-      })
-      if (fetchData) {
-        const { data: list, ...pagi } = fetchData
-        setGroupList(list as IGroup[])
-        setPagination(pagi)
+        fetchCategories()
       }
     } catch (error) {
       console.log(error)
@@ -100,15 +75,8 @@ export default function GroupPage() {
   }, [])
 
   useEffect(() => {
-    if (categoriesList?.length) {
-      const searchParams = new URLSearchParams(location.search)
-      setCategoryId(parseInt(searchParams.get('group') || '0') || 0)
-    }
-  }, [categoriesList])
-
-  useEffect(() => {
-    fetchGroup()
-  }, [categoryId, pagination.page])
+    fetchCategories()
+  }, [pagination.page])
 
   const handleChangePagination = (
     _: React.ChangeEvent<unknown>,
@@ -121,21 +89,9 @@ export default function GroupPage() {
     return [
       { key: 'id', header: '#ID' },
       {
-        key: 'label',
-        header: 'Label',
-        value: (item: IGroup) => (
-          <Stack direction="row" alignItems="center" columnGap={2}>
-            {item.image && (
-              <img src={item.image} alt="" style={{ maxWidth: 100 }} />
-            )}
-            <p>{item.label}</p>
-          </Stack>
-        )
-      },
-      {
         key: 'title',
         header: 'Title',
-        value: (item: IGroup) => (
+        value: (item: ICategory) => (
           <Stack direction="row" alignItems="center" columnGap={2}>
             <p>{item.title}</p>
           </Stack>
@@ -146,17 +102,43 @@ export default function GroupPage() {
         header: 'Description'
       },
       {
-        key: 'label_html',
-        header: 'Label HTML'
+        key: 'content',
+        header: 'Content'
+      },
+      {
+        key: 'link_url',
+        header: 'Link URL'
+      },
+      {
+        key: 'thumbnail',
+        header: 'Thumbnail',
+        value: (item: ICategory) => (
+          <Stack direction="row" alignItems="center" columnGap={2}>
+            {item.thumbnail && (
+              <img src={item.thumbnail} alt="" style={{ maxWidth: 100 }} />
+            )}
+          </Stack>
+        )
+      },
+      {
+        key: 'background',
+        header: 'Background',
+        value: (item: ICategory) => (
+          <Stack direction="row" alignItems="center" columnGap={2}>
+            {item.background && (
+              <img src={item.background} alt="" style={{ maxWidth: 100 }} />
+            )}
+          </Stack>
+        )
       },
       {
         key: 'action',
         header: 'Action',
-        value: (item: IGroup) => (
+        value: (item: ICategory) => (
           <Stack direction="row">
             <IconButton
               onClick={() => {
-                setSelectProduct(item)
+                setSelectedCategory(item)
                 setShowDrawer(true)
               }}
             >
@@ -169,12 +151,12 @@ export default function GroupPage() {
         )
       }
     ]
-  }, [groupList])
+  }, [categoriesList])
 
   return (
     <Stack pt={2}>
       <Typography variant="h3" mb={2}>
-        Groups
+        Categories
       </Typography>
 
       <Stack
@@ -183,22 +165,7 @@ export default function GroupPage() {
         justifyContent="space-between"
         mb={2}
       >
-        <CustomSelect
-          label="Category"
-          value={categoryId}
-          onChange={(event: SelectChangeEvent<unknown>) => {
-            setCategoryId(parseInt(event.target.value as string) || 0)
-          }}
-          sx={{ width: 400 }}
-        >
-          <MenuItem value={0}>-- Choose Category --</MenuItem>
-          {categoriesList?.map((gr) => (
-            <MenuItem key={gr.id} value={gr.id}>
-              {gr?.title}
-            </MenuItem>
-          ))}
-        </CustomSelect>
-        {groupList?.length > 0 && (
+        {categoriesList?.length > 0 && (
           <Stack
             direction="row"
             alignItems="center"
@@ -219,18 +186,18 @@ export default function GroupPage() {
               variant="outlined"
               sx={{ mb: 2 }}
               onClick={() => {
-                setSelectProduct(null)
+                setSelectedCategory(null)
                 setShowDrawer(true)
               }}
             >
-              Create New Group
+              Create New Category
             </Button>
           </Stack>
         )}
       </Stack>
 
       <MyTable
-        data={groupList}
+        data={categoriesList}
         columns={columns}
         selectable
         onChangeSelection={setSelectedIds}
@@ -253,12 +220,11 @@ export default function GroupPage() {
           }
         }}
       >
-        <CreateGroup
-          categoryList={categoriesList}
-          data={selectedProduct}
+        <CreateProduct
+          data={selectedCategory}
           onSuccess={() => {
             setShowDrawer(false)
-            fetchGroup()
+            fetchCategories()
           }}
         />
       </Drawer>

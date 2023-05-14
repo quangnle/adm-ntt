@@ -25,7 +25,7 @@ const DEFAULT_FORM = {
   category_id: 0
 }
 
-export default function CreateProduct({
+export default function CreateGroup({
   data,
   onSuccess,
   categoryList

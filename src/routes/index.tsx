@@ -13,6 +13,7 @@ import ListEmailPage from '@/pages/list-email'
 import ProductPage from '@/pages/product'
 import ProductsSolutions from '@/pages/products-solutions'
 import GroupPage from '@/pages/group'
+import CategoryPage from '@/pages/cagories'
 
 const internalRoutes = [
   { name: 'Dashboard', path: '/admin', component: <Dashboard /> },
@@ -22,6 +23,11 @@ const internalRoutes = [
   { name: 'Contact', path: '/admin/contact', component: <ContactPage /> },
   { name: 'AboutUs', path: '/admin/about-us', component: <AboutUsPage /> },
   { name: 'ListForm', path: '/admin/list-form', component: <ListFormPage /> },
+  {
+    name: 'Categories',
+    path: '/admin/categories',
+    component: <CategoryPage />
+  },
   {
     name: 'ListEmail',
     path: '/admin/list-email',

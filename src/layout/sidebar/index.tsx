@@ -13,7 +13,11 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import HomeIcon from '@mui/icons-material/Home'
 import InventoryIcon from '@mui/icons-material/Inventory'
 import { Link } from 'react-router-dom'
-import { AppsRounded, ArchiveRounded } from '@mui/icons-material'
+import {
+  AppsRounded,
+  ArchiveRounded,
+  CategoryRounded
+} from '@mui/icons-material'
 
 const drawerWidth = 240
 
@@ -30,6 +34,10 @@ const menus: IMenus = {
   'products-solutions': {
     value: 'Products & Solutions',
     icon: <ArchiveRounded />
+  },
+  categories: {
+    value: 'Categories',
+    icon: <CategoryRounded />
   },
   groups: {
     value: 'Groups',
