@@ -9,6 +9,7 @@ import HeroBannerModule from './hero-banner'
 import NewsLetterModule from './news-letter'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AboutUsModule from './about-us'
+import ProductThumbnails from './products-thumbnail'
 
 const registerComponents = {
   HeroBannerModule: {

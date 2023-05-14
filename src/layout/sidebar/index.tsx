@@ -28,7 +28,8 @@ const menus: IMenus = {
   contact: { value: 'Contact', icon: <ContactPageIcon /> },
   'about-us': { value: 'About Us', icon: <InfoIcon /> },
   'list-form': { value: 'List Form', icon: <DescriptionIcon /> },
-  'list-email': { value: 'List Email', icon: <MailIcon /> }
+  'list-email': { value: 'List Email', icon: <MailIcon /> },
+  'products-solutions': { value: 'Products & Solutions', icon: <MailIcon /> }
 }
 
 export default function AppSidebar() {
