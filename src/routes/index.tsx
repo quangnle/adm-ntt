@@ -12,6 +12,7 @@ import ListFormPage from '@/pages/list-form'
 import ListEmailPage from '@/pages/list-email'
 import ProductPage from '@/pages/product'
 import ProductsSolutions from '@/pages/products-solutions'
+import GroupPage from '@/pages/group'
 
 const internalRoutes = [
   { name: 'Dashboard', path: '/admin', component: <Dashboard /> },
@@ -30,6 +31,11 @@ const internalRoutes = [
     name: 'ProductSolutions',
     path: '/admin/products-solutions',
     component: <ProductsSolutions />
+  },
+  {
+    name: 'Groups',
+    path: '/admin/groups',
+    component: <GroupPage />
   }
 ]
 

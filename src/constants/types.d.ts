@@ -43,3 +43,20 @@ export type IProduct = {
   created_at: string
   updated_at: string
 }
+
+export type ICategory = {
+  id: number
+  link_url: string
+  title: string
+  alias: string
+  thumbnail: string
+  background: hstring
+  description: string
+  content: string
+  meta_description: string
+  meta_keywords: string
+  is_active: number
+  priority: number
+  created_at: string
+  updated_at: string
+}

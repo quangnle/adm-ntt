@@ -11,8 +11,32 @@ export const getAll = async (params?: {
   return data
 }
 
+export const create = async (payload: {
+  title: string
+  image: string
+  label: string
+  label_html: string
+  description: string
+  category_id: number
+}) => axios.post('/groups', payload)
+
+export const update = async ({
+  id,
+  ...payload
+}: {
+  id: number
+  title: string
+  image: string
+  label: string
+  label_html: string
+  description: string
+  category_id: number
+}) => axios.patch(`/groups/${id}`, payload)
+
 const groupService = {
-  getAll
+  getAll,
+  create,
+  update
 }
 
 export default groupService
