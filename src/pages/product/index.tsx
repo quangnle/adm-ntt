@@ -22,6 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import useDrawer from '@/hooks/useDrawer'
 import CreateProduct from './create'
+import SelectGroup from './SelectGroup'
+import ConfirmDialog from '@/components/confirm-dialog'
 
 const DEFAULT_PAGINATION = {
   page: 1,
@@ -39,7 +41,7 @@ export default function ProductPage() {
   const [pagination, setPagination] = useState(DEFAULT_PAGINATION)
 
   const [selectedProduct, setSelectProduct] = useState<IProduct | null>(null)
-  const [_, setSelectedIds] = useState<number[]>([])
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
 
   const [showDrawer, toggleDrawer, setShowDrawer] = useDrawer()
 
@@ -74,13 +76,6 @@ export default function ProductPage() {
   useEffect(() => {
     fetchGroups()
   }, [])
-
-  useEffect(() => {
-    if (groupList?.length) {
-      const searchParams = new URLSearchParams(location.search)
-      setGroupId(parseInt(searchParams.get('group') || '0') || 0)
-    }
-  }, [groupList])
 
   useEffect(() => {
     groupId && fetchProducts()
@@ -134,7 +129,7 @@ export default function ProductPage() {
             >
               <EditIcon />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => setShowDeleteOneModal(item)}>
               <DeleteIcon color="error" />
             </IconButton>
           </Stack>
@@ -142,6 +137,42 @@ export default function ProductPage() {
       }
     ]
   }, [productList])
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showDeleteOneModal, setShowDeleteOneModal] = useState<IProduct | null>(
+    null
+  )
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false)
+    setShowDeleteOneModal(null)
+  }
+  const handleConfirmDeleteOneModal = async () => {
+    try {
+      if (!showDeleteOneModal) return
+      const { data } = await productService.deleteMany({
+        ids: [showDeleteOneModal?.id]
+      })
+      if (data) {
+        handleCloseDeleteModal()
+        fetchProducts()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleConfirmDeleteMultiModal = async () => {
+    try {
+      const { data } = await productService.deleteMany({
+        ids: selectedIds
+      })
+      if (data) {
+        handleCloseDeleteModal()
+        fetchProducts()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <Stack pt={2}>
@@ -155,32 +186,14 @@ export default function ProductPage() {
         justifyContent="space-between"
         mb={2}
       >
-        <CustomSelect
-          label="Group"
-          value={groupId}
-          onChange={(event: SelectChangeEvent<unknown>) => {
-            setGroupId(parseInt(event.target.value as string) || 0)
-          }}
-          sx={{ width: 400 }}
-        >
-          <MenuItem value={0}>-- Choose Group --</MenuItem>
-          {groupList?.map((gr) => (
-            <MenuItem key={gr.id} value={gr.id}>
-              {gr?.label}
-            </MenuItem>
-          ))}
-        </CustomSelect>
-        {productList?.length > 0 && (
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            mb={2}
-          >
+        <SelectGroup groupId={groupId} setGroupId={setGroupId} />
+      </Stack>
+
+      {groupId !== 0 && (
+        <>
+          <Stack direction="row" justifyContent="space-between" mb={2}>
             <Button
-              style={{ margin: '16px 0' }}
               variant="outlined"
-              sx={{ mb: 2 }}
               onClick={() => {
                 setSelectProduct(null)
                 setShowDrawer(true)
@@ -188,12 +201,26 @@ export default function ProductPage() {
             >
               Create new match
             </Button>
+            {!!selectedIds.length && (
+              <Stack
+                direction="row"
+                justifyContent="end"
+                alignItems="center"
+                spacing={2}
+              >
+                <Typography>Selected Product: {selectedIds.length}</Typography>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => {
+                    setShowDeleteModal(true)
+                  }}
+                >
+                  Delete All
+                </Button>
+              </Stack>
+            )}
           </Stack>
-        )}
-      </Stack>
-
-      {groupId !== 0 && (
-        <>
           <MyTable
             data={productList}
             columns={columns}
@@ -222,12 +249,26 @@ export default function ProductPage() {
       >
         <CreateProduct
           data={selectedProduct}
+          groupId={groupId}
           onSuccess={() => {
-            toggleDrawer(false)
+            setShowDrawer(false)
             fetchProducts()
           }}
         />
       </Drawer>
+
+      <ConfirmDialog
+        open={showDeleteOneModal !== null}
+        content="Are you sure to delete selected product?"
+        handleClose={handleCloseDeleteModal}
+        handleAgree={handleConfirmDeleteOneModal}
+      />
+      <ConfirmDialog
+        open={showDeleteModal}
+        content="Are you sure to delete all selected product?"
+        handleClose={handleCloseDeleteModal}
+        handleAgree={handleConfirmDeleteMultiModal}
+      />
     </Stack>
   )
 }
