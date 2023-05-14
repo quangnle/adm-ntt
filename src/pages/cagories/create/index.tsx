@@ -6,7 +6,7 @@ import { ICategory } from '@/constants/types'
 import { mergePattern } from '@/utils'
 import { LoadingButton } from '@mui/lab'
 import { Grid, Stack, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const DEFAULT_FORM = {
   id: 0,
