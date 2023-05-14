@@ -132,7 +132,7 @@ export default function UpdateConfig({ data }: { data: ConfigType }) {
 
       {isSuccess && (
         <Typography color="#28a745" mb={2}>
-          Config updated successfuly
+          Configurations updated successfully
         </Typography>
       )}
 
