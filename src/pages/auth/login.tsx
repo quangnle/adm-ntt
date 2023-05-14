@@ -14,8 +14,10 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { useSnackbar } from 'notistack'
 
 export default function Login() {
+  const { enqueueSnackbar } = useSnackbar()
   const [form, setForm] = useState({
     username: 'admin',
     password: '123456'
@@ -43,10 +45,14 @@ export default function Login() {
       const { data } = await authService.login(payload)
       if (data.user) {
         dispatch(AuthActions.login({ ...data }))
+        enqueueSnackbar('Login successfully!', { variant: 'success' })
 
         navigate('/admin', { replace: true })
+      } else {
+        enqueueSnackbar('Login failed!', { variant: 'error' })
       }
     } catch (error) {
+      enqueueSnackbar('Login failed!', { variant: 'error' })
       console.log(error)
     }
   }

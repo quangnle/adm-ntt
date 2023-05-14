@@ -26,8 +26,6 @@ const DEFAULT_PAGINATION = {
   perPage: 10
 }
 
-let debounce: NodeJS.Timeout
-
 export default function ProductPage() {
   const [filter, setFilter] = useState({
     groupId: 0,
