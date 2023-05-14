@@ -27,15 +27,15 @@ interface IMenus {
 const menus: IMenus = {
   setting: { value: 'General Settings', icon: <InboxIcon /> },
   homepage: { value: 'Home', icon: <HomeIcon /> },
+  'products-solutions': {
+    value: 'Products & Solutions',
+    icon: <ArchiveRounded />
+  },
   products: { value: 'Products', icon: <InventoryIcon /> },
   contact: { value: 'Contact', icon: <ContactPageIcon /> },
   'about-us': { value: 'About Us', icon: <InfoIcon /> },
   'list-form': { value: 'List Form', icon: <DescriptionIcon /> },
-  'list-email': { value: 'List Email', icon: <MailIcon /> },
-  'products-solutions': {
-    value: 'Products & Solutions',
-    icon: <ArchiveRounded />
-  }
+  'list-email': { value: 'List Email', icon: <MailIcon /> }
 }
 
 export default function AppSidebar() {
