@@ -11,6 +11,7 @@ import AboutUsPage from '@/pages/about-us'
 import ListFormPage from '@/pages/list-form'
 import ListEmailPage from '@/pages/list-email'
 import ProductPage from '@/pages/product'
+import ProductsSolutions from '@/pages/products-solutions'
 
 const internalRoutes = [
   { name: 'Dashboard', path: '/admin', component: <Dashboard /> },
@@ -20,7 +21,16 @@ const internalRoutes = [
   { name: 'Contact', path: '/admin/contact', component: <ContactPage /> },
   { name: 'AboutUs', path: '/admin/about-us', component: <AboutUsPage /> },
   { name: 'ListForm', path: '/admin/list-form', component: <ListFormPage /> },
-  { name: 'ListEmail', path: '/admin/list-email', component: <ListEmailPage /> }
+  {
+    name: 'ListEmail',
+    path: '/admin/list-email',
+    component: <ListEmailPage />
+  },
+  {
+    name: 'ProductSolutions',
+    path: '/admin/products-solutions',
+    component: <ProductsSolutions />
+  }
 ]
 
 const AppRoutes = () => {
