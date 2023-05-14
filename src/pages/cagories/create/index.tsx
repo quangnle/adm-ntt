@@ -65,7 +65,7 @@ export default function CreateCategory({
   return (
     <Stack p={2}>
       <Typography variant="h4" sx={{ mb: 4 }}>
-        {form?.id ? 'Update' : 'Create'} Group
+        {form?.id ? 'Update' : 'Create'} Category
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={5}>
