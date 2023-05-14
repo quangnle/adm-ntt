@@ -1,19 +1,23 @@
 import uploadService from '@/api/upload'
 import { FormComponentError } from './type'
-import { FormHelperText } from '@mui/material'
+import { FormHelperText, FormLabel } from '@mui/material'
 
 type UploadImageType = {
+  label?: string
   value?: string
   onChange: (_: string) => void
   module: string
   imageAspect?: string
+  mode?: 'cover' | 'contain'
 } & FormComponentError
 
 const UploadImage = ({
+  label,
   value,
   onChange,
   module,
   imageAspect = '3/2',
+  mode = 'cover',
   error,
   helperText
 }: UploadImageType) => {
@@ -41,10 +45,13 @@ const UploadImage = ({
           alignItems: 'center',
           width: '100%',
           aspectRatio: imageAspect,
-          border: '3px dashed black',
+          border: '2px dashed #00000066',
           borderRadius: 20
         }}
       >
+        <FormLabel sx={{ position: 'absolute', top: -24, left: 0 }}>
+          {label}
+        </FormLabel>
         {value && (
           <img
             src={value}
@@ -53,7 +60,7 @@ const UploadImage = ({
               padding: 10,
               width: '100%',
               aspectRatio: imageAspect,
-              objectFit: 'cover'
+              objectFit: mode
             }}
           />
         )}

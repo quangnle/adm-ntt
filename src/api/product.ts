@@ -32,10 +32,14 @@ export const update = async ({
   priority: number
 }) => axios.patch(`/products/${id}`, payload)
 
+export const deleteMany = async (params: { ids: number[] }) =>
+  axios.delete('/products', { params })
+
 const productService = {
   getAll,
   create,
-  update
+  update,
+  deleteMany
 }
 
 export default productService

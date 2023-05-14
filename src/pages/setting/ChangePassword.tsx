@@ -129,7 +129,7 @@ export default function ChangePassword() {
       </Grid>
 
       {isSuccess && (
-        <Typography color="#28a745">Password updated successfuly</Typography>
+        <Typography color="#28a745">Password updated successfully</Typography>
       )}
 
       <LoadingButton

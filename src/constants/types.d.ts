@@ -11,6 +11,23 @@ export type ConfigType = {
   value: never
 }
 
+export type ICategory = {
+  id: number
+  link_url: string
+  title: string
+  alias: string
+  thumbnail: string | null
+  background: string | null
+  description: string | null
+  content: string | null
+  meta_description: string | null
+  meta_keywords: string | null
+  is_active: number
+  priority: number
+  created_at: string
+  updated_at: string
+}
+
 export type IGroup = {
   id: number
   label: string

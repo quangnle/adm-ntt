@@ -1,4 +1,4 @@
-import configService from '@/api/config'
+import configService, { TKeyConfig } from '@/api/config'
 import { useEffect, useState } from 'react'
 
 type ConfigType<T extends object> = {
@@ -10,7 +10,7 @@ type ConfigType<T extends object> = {
 }
 
 export default function useFetchConfig<T extends object>(
-  key: string
+  key: TKeyConfig
 ): [ConfigType<T> | null, boolean, () => Promise<void>] {
   const [config, setConfig] = useState<ConfigType<T> | null>(null)
   const [isFetching, setIsFetching] = useState(false)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
-import { Stack, Typography } from '@mui/material'
+import { IconButton, Stack, Typography } from '@mui/material'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -53,7 +53,7 @@ export default function ListEmailPage() {
     setOpen(false)
   }
 
-  const onDeleteSubcriber = async () => {
+  const onDeleteSubscriber = async () => {
     try {
       if (idSubciberCurrent?.id) {
         await deleteListEmail(idSubciberCurrent?.id)
@@ -110,7 +110,9 @@ export default function ListEmailPage() {
                     style={{ cursor: 'pointer' }}
                     onClick={() => handleClickOpen(row?.id, row?.email)}
                   >
-                    <DeleteIcon />
+                    <IconButton>
+                      <DeleteIcon color="error" />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -139,7 +141,7 @@ export default function ListEmailPage() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>No</Button>
-            <Button onClick={onDeleteSubcriber} autoFocus>
+            <Button onClick={onDeleteSubscriber} autoFocus>
               Yes
             </Button>
           </DialogActions>
