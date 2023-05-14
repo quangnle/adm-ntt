@@ -67,13 +67,14 @@ const HeroBannerModule: FC<
       </Grid>
 
       <Grid container item xs={4} spacing={2}>
-        <Grid item xs={12}>
+        <Grid item xs={12} mb={2}>
           <UploadImage
             value={data?.rightImg}
             onChange={(value) =>
               onChange && onChange({ ...data, rightImg: value })
             }
             module="upload"
+            label="Right Image"
           />
         </Grid>
         <Grid item xs={12}>
@@ -83,6 +84,7 @@ const HeroBannerModule: FC<
               onChange && onChange({ ...data, background: value })
             }
             module="upload"
+            label="Background"
           />
         </Grid>
       </Grid>
