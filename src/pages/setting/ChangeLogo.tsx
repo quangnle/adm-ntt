@@ -38,16 +38,6 @@ export default function ChangeLogo({ data }: { data: ConfigType }) {
         mb={2}
       >
         <Typography variant="h5">Change Logo</Typography>
-
-        <LoadingButton
-          variant="contained"
-          size="large"
-          onClick={handleSubmitForm}
-          loading={creating}
-          sx={{ marginTop: 'auto' }}
-        >
-          Update
-        </LoadingButton>
       </Stack>
       <Box flex={1}>
         <UploadImage
@@ -65,6 +55,15 @@ export default function ChangeLogo({ data }: { data: ConfigType }) {
             setForm((prev) => ({ ...prev, alt: event.target.value }))
           }
         />
+        <LoadingButton
+          variant="contained"
+          size="large"
+          onClick={handleSubmitForm}
+          loading={creating}
+          sx={{ marginTop: 'auto', width: '100%' }}
+        >
+          Update
+        </LoadingButton>
       </Box>
     </>
   )

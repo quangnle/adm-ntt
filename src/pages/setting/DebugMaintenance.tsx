@@ -124,7 +124,7 @@ export default function DebugMaintenance() {
         size="large"
         onClick={handleSubmitForm}
         loading={loading}
-        sx={{ mt: 2, mb: 2 }}
+        sx={{ mt: 2, mb: 2, width: '100%' }}
       >
         Update
       </LoadingButton>

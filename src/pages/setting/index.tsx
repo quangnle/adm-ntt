@@ -5,6 +5,7 @@ import useFetchConfig from '@/hooks/useFetchConfig'
 import CircularProgress from '@mui/material/CircularProgress'
 import ChangeLogo from './ChangeLogo'
 import DebugMaintenance from './DebugMaintenance'
+import MenuLayout from './MenuLayout'
 
 export default function SettingPage() {
   const [data, isLoading] = useFetchConfig('contact')
@@ -90,6 +91,18 @@ export default function SettingPage() {
             }}
           >
             <DebugMaintenance />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sx={{ p: 2 }}>
+          <Paper
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              p: 2,
+              height: '100%'
+            }}
+          >
+            <MenuLayout />
           </Paper>
         </Grid>
       </Grid>

@@ -9,9 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Checkbox from '@mui/material/Checkbox'
 import CssBaseline from '@mui/material/CssBaseline'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
@@ -28,7 +26,7 @@ export default function Login() {
 
   const navigate = useNavigate()
 
-  if (credential.isAuthenticated) return <Navigate to="/admin" />
+  if (credential.isAuthenticated) return <Navigate to="/admin/setting" />
 
   const handleInputChange = (name: string, value: string) => {
     setForm((prev) => ({
@@ -118,10 +116,6 @@ export default function Login() {
               onChange={(event) =>
                 handleInputChange('password', event.target.value)
               }
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"
