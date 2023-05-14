@@ -45,7 +45,8 @@ export default function AboutUsPage() {
     setDetail((prev) => {
       return {
         ...prev,
-        content: data.content || ''
+        content: data.content || '',
+        heading: data.heading || ''
       }
     })
   }

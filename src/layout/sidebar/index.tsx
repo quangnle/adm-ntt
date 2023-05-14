@@ -11,7 +11,9 @@ import Toolbar from '@mui/material/Toolbar'
 import InfoIcon from '@mui/icons-material/Info'
 import DescriptionIcon from '@mui/icons-material/Description'
 import HomeIcon from '@mui/icons-material/Home'
+import InventoryIcon from '@mui/icons-material/Inventory'
 import { Link } from 'react-router-dom'
+import { ArchiveRounded, ImageSearchOutlined } from '@mui/icons-material'
 
 const drawerWidth = 240
 
@@ -25,7 +27,11 @@ interface IMenus {
 const menus: IMenus = {
   setting: { value: 'General Settings', icon: <InboxIcon /> },
   homepage: { value: 'Home', icon: <HomeIcon /> },
-  products: { value: 'Products', icon: <HomeIcon /> },
+  'products-solutions': {
+    value: 'Products & Solutions',
+    icon: <ArchiveRounded />
+  },
+  products: { value: 'Products', icon: <InventoryIcon /> },
   contact: { value: 'Contact', icon: <ContactPageIcon /> },
   'about-us': { value: 'About Us', icon: <InfoIcon /> },
   'list-form': { value: 'List Form', icon: <DescriptionIcon /> },

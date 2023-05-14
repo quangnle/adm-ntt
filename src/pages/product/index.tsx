@@ -199,7 +199,7 @@ export default function ProductPage() {
                 setShowDrawer(true)
               }}
             >
-              Create new match
+              Create New Product
             </Button>
             {!!selectedIds.length && (
               <Stack

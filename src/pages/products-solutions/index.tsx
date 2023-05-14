@@ -1,44 +1,27 @@
-import { useEffect, useState } from 'react'
 import configService from '@/api/config'
 import useFetchConfig from '@/hooks/useFetchConfig'
-import ComponentModule, { registerComponentType } from '@/modules'
+import ProductThumbnails from '@/modules/products-thumbnail'
 import { LoadingButton } from '@mui/lab'
-import { Box, Stack, Typography } from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
+import { Box, CircularProgress, Stack, Typography } from '@mui/material'
+import { FC, useEffect, useState } from 'react'
 
-export default function Homepage() {
-  const [config, isFetching, fetchConfig] = useFetchConfig<{ components: [] }>(
-    'homepage'
-  )
-  const [form, setForm] = useState<
-    {
-      component: registerComponentType
-      data: Record<string, string>
-    }[]
-  >([])
-  useEffect(() => {
-    setForm(config?.value?.components || [])
-  }, [config])
+interface Props {}
+
+const ProductsSolutions: FC<Props> = () => {
+  const [config, isFetching, fetchConfig] = useFetchConfig<any>('products')
+  const [form, setForm] = useState<any>()
   const [isCreating, setIsCreating] = useState(false)
 
-  const handleChangeComponentForm = (
-    index: number,
-    newData: Record<string, string>
-  ) => {
-    const newForm = [...form]
-    newForm[index].data = newData
-
-    setForm(newForm)
-  }
+  useEffect(() => {
+    setForm(config?.value)
+  }, [config?.value])
 
   const handleSubmitForm = async () => {
     if (!config?.id) return
     try {
       setIsCreating(true)
       const { data } = await configService.updateConfigWithKey(config.id, {
-        value: {
-          components: form
-        }
+        value: form
       })
       if (data) {
         fetchConfig()
@@ -54,14 +37,14 @@ export default function Homepage() {
     <Stack sx={{ width: '100%', pt: 2 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h3" mb={2}>
-          Homepage
+          Products & Solutions
         </Typography>
 
         <LoadingButton
-          variant="contained"
-          size="large"
           onClick={handleSubmitForm}
           loading={isCreating}
+          variant="contained"
+          size="large"
         >
           Update
         </LoadingButton>
@@ -83,17 +66,17 @@ export default function Homepage() {
         </>
       ) : (
         <>
-          {form?.map((comp, index) => (
-            <ComponentModule
-              key={index}
-              {...comp}
-              onChange={(data: unknown) =>
-                handleChangeComponentForm(index, data as Record<string, string>)
-              }
-            />
-          ))}
+          <ProductThumbnails
+            data={{
+              content: '',
+              ...form
+            }}
+            onChange={(data) => setForm(data)}
+          />
         </>
       )}
     </Stack>
   )
 }
+
+export default ProductsSolutions

@@ -10,6 +10,7 @@ import NewsLetterModule from './news-letter'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AboutUsModule from './about-us'
 import ValuesToCustomerModule, { IValueCustomerForm } from './values-customer'
+import ContactDetailModule, { IContactDetailForm } from './contact-detail'
 
 const registerComponents = {
   HeroBannerModule: {
@@ -25,12 +26,16 @@ const registerComponents = {
     comp: NewsLetterModule
   },
   ContactDetailModule: {
-    name: 'Detail About Us',
+    name: 'About Us Detail',
     comp: AboutUsModule
   },
   ValuesToCustomer: {
     name: 'Values To Customer',
     comp: ValuesToCustomerModule
+  },
+  ContactDetail: {
+    name: 'Contact Detail',
+    comp: ContactDetailModule
   }
 }
 
@@ -60,7 +65,11 @@ export default function ComponentModule({
       </AccordionSummary>
       <AccordionDetails>
         <componentModule.comp
-          data={data as unknown as Record<string, string> & IValueCustomerForm}
+          data={
+            data as unknown as Record<string, string> &
+              IContactDetailForm &
+              IValueCustomerForm
+          }
           onChange={onChange}
         />
       </AccordionDetails>
