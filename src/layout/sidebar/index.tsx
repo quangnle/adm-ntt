@@ -13,6 +13,7 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import HomeIcon from '@mui/icons-material/Home'
 import InventoryIcon from '@mui/icons-material/Inventory'
 import { Link } from 'react-router-dom'
+import { ArchiveRounded, ImageSearchOutlined } from '@mui/icons-material'
 
 const drawerWidth = 240
 
@@ -31,7 +32,10 @@ const menus: IMenus = {
   'about-us': { value: 'About Us', icon: <InfoIcon /> },
   'list-form': { value: 'List Form', icon: <DescriptionIcon /> },
   'list-email': { value: 'List Email', icon: <MailIcon /> },
-  'products-solutions': { value: 'Products & Solutions', icon: <MailIcon /> }
+  'products-solutions': {
+    value: 'Products & Solutions',
+    icon: <ArchiveRounded />
+  }
 }
 
 export default function AppSidebar() {
