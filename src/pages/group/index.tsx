@@ -8,7 +8,8 @@ import {
   Pagination,
   SelectChangeEvent,
   Stack,
-  Typography
+  Typography,
+  debounce
 } from '@mui/material'
 import { IGroup, ICategory } from '@/constants/types'
 import CustomSelect from '@/components/form/CustomSelect'
@@ -20,6 +21,8 @@ import useDrawer from '@/hooks/useDrawer'
 import categoryService from '@/api/category'
 import groupService from '@/api/group'
 import CreateGroup from './create'
+import MyTextField from '@/components/form/MyTextField'
+import ConfirmDialog from '@/components/confirm-dialog'
 
 const DEFAULT_PAGINATION = {
   page: 1,
@@ -38,7 +41,11 @@ export default function GroupPage() {
 
   const [selectedProduct, setSelectProduct] = useState<IGroup | null>(null)
   const [selectedIds, setSelectedIds] = useState<number[]>([])
-
+  const [searchLabel, setSearchLabel] = useState('')
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showDeleteOneModal, setShowDeleteOneModal] = useState<IGroup | null>(
+    null
+  )
   const [showDrawer, toggleDrawer, setShowDrawer] = useDrawer()
 
   const fetchCategories = async () => {
@@ -52,38 +59,13 @@ export default function GroupPage() {
     }
   }
 
-  const deleteGroups = async () => {
-    try {
-      const fetchData = await groupService.deleteMany({
-        ids: selectedIds
-      })
-      if (fetchData) {
-        fetchGroup()
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const deleteOneGroup = async (selectedId: number) => {
-    try {
-      const fetchData = await groupService.deleteMany({
-        ids: [selectedId]
-      })
-      if (fetchData) {
-        fetchGroup()
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   const fetchGroup = async () => {
     try {
       const fetchData = await groupService.getAll({
         category_id: categoryId == 0 ? undefined : categoryId,
         page: pagination.page,
-        per_page: pagination.perPage
+        per_page: pagination.perPage,
+        label: searchLabel
       })
       if (fetchData) {
         const { data: list, ...pagi } = fetchData
@@ -108,7 +90,7 @@ export default function GroupPage() {
 
   useEffect(() => {
     fetchGroup()
-  }, [categoryId, pagination.page])
+  }, [categoryId, searchLabel, pagination.page])
 
   const handleChangePagination = (
     _: React.ChangeEvent<unknown>,
@@ -121,23 +103,22 @@ export default function GroupPage() {
     return [
       { key: 'id', header: '#ID' },
       {
-        key: 'label',
-        header: 'Label',
+        key: 'image',
+        header: 'Image',
         value: (item: IGroup) => (
           <Stack direction="row" alignItems="center" columnGap={2}>
             {item.image && (
               <img src={item.image} alt="" style={{ maxWidth: 100 }} />
             )}
-            <p>{item.label}</p>
           </Stack>
         )
       },
       {
-        key: 'title',
-        header: 'Title',
+        key: 'label',
+        header: 'Label',
         value: (item: IGroup) => (
           <Stack direction="row" alignItems="center" columnGap={2}>
-            <p>{item.title}</p>
+            <p>{item.label}</p>
           </Stack>
         )
       },
@@ -146,8 +127,19 @@ export default function GroupPage() {
         header: 'Description'
       },
       {
-        key: 'label_html',
-        header: 'Label HTML'
+        key: 'category',
+        header: 'Category',
+        value: (item: IGroup) => (
+          <Stack direction="row" alignItems="center" columnGap={2}>
+            <p>
+              {
+                categoriesList.find(
+                  (category) => category.id == item.category_id
+                )?.title
+              }
+            </p>
+          </Stack>
+        )
       },
       {
         key: 'action',
@@ -162,7 +154,7 @@ export default function GroupPage() {
             >
               <EditIcon />
             </IconButton>
-            <IconButton onClick={() => deleteOneGroup(item.id)}>
+            <IconButton onClick={() => setShowDeleteOneModal(item)}>
               <DeleteIcon color="error" />
             </IconButton>
           </Stack>
@@ -171,8 +163,51 @@ export default function GroupPage() {
     ]
   }, [groupList])
 
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false)
+    setShowDeleteOneModal(null)
+  }
+  const handleConfirmDeleteOneModal = async () => {
+    try {
+      if (!showDeleteOneModal) return
+      const { data } = await groupService.deleteMany({
+        ids: [showDeleteOneModal?.id]
+      })
+      if (data) {
+        handleCloseDeleteModal()
+        fetchGroup()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleConfirmDeleteMultiModal = async () => {
+    try {
+      const { data } = await groupService.deleteMany({
+        ids: selectedIds
+      })
+      if (data) {
+        handleCloseDeleteModal()
+        fetchGroup()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <Stack pt={2}>
+      <ConfirmDialog
+        open={showDeleteOneModal !== null}
+        content="Are you sure to delete selected group?"
+        handleClose={handleCloseDeleteModal}
+        handleAgree={handleConfirmDeleteOneModal}
+      />
+      <ConfirmDialog
+        open={showDeleteModal}
+        content="Are you sure to delete all selected group?"
+        handleClose={handleCloseDeleteModal}
+        handleAgree={handleConfirmDeleteMultiModal}
+      />
       <Typography variant="h3" mb={2}>
         Groups
       </Typography>
@@ -183,50 +218,65 @@ export default function GroupPage() {
         justifyContent="space-between"
         mb={2}
       >
-        <CustomSelect
-          label="Category"
-          value={categoryId}
-          onChange={(event: SelectChangeEvent<unknown>) => {
-            setCategoryId(parseInt(event.target.value as string) || 0)
-          }}
-          sx={{ width: 400 }}
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
         >
-          <MenuItem value={0}>-- Choose Category --</MenuItem>
-          {categoriesList?.map((gr) => (
-            <MenuItem key={gr.id} value={gr.id}>
-              {gr?.title}
-            </MenuItem>
-          ))}
-        </CustomSelect>
-        {groupList?.length > 0 && (
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            mb={2}
+          <CustomSelect
+            label="Category"
+            value={categoryId}
+            onChange={(event: SelectChangeEvent<unknown>) => {
+              setCategoryId(parseInt(event.target.value as string) || 0)
+            }}
+            sx={{ width: 300 }}
           >
-            <Button
-              style={{ margin: '16px 0', marginRight: 16 }}
-              color="error"
-              variant="outlined"
-              sx={{ mb: 2 }}
-              onClick={deleteGroups}
-            >
-              Delete
-            </Button>
-            <Button
-              style={{ margin: '16px 0' }}
-              variant="outlined"
-              sx={{ mb: 2 }}
-              onClick={() => {
-                setSelectProduct(null)
-                setShowDrawer(true)
-              }}
-            >
-              Create New Group
-            </Button>
+            <MenuItem value={0}>-- Choose Category --</MenuItem>
+            {categoriesList?.map((gr) => (
+              <MenuItem key={gr.id} value={gr.id}>
+                {gr?.title}
+              </MenuItem>
+            ))}
+          </CustomSelect>
+          <Stack ml={2} sx={{ width: 300 }}>
+            <MyTextField
+              style={{ marginBottom: 0 }}
+              onChange={debounce((e) => setSearchLabel(e.target.value), 300)}
+              fullWidth
+              label="Label"
+              placeholder="Enter group label"
+              name="label"
+            />
           </Stack>
-        )}
+        </Stack>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={2}
+        >
+          <Button
+            style={{ margin: '16px 0', marginRight: 16 }}
+            color="error"
+            variant="outlined"
+            sx={{ mb: 2 }}
+            disabled={selectedIds.length == 0}
+            onClick={() => setShowDeleteModal(true)}
+          >
+            Delete
+          </Button>
+          <Button
+            style={{ margin: '16px 0' }}
+            variant="outlined"
+            sx={{ mb: 2 }}
+            onClick={() => {
+              setSelectProduct(null)
+              setShowDrawer(true)
+            }}
+          >
+            Create New Group
+          </Button>
+        </Stack>
       </Stack>
 
       <MyTable

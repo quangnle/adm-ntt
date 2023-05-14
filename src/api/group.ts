@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export const getAll = async (params?: {
   category_id?: number
+  label?: string
   page?: number
   per_page?: number
   order_by?: 'priority' | ''
