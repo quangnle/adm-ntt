@@ -53,6 +53,8 @@ const ProductThumbnails: FC<
           onChange={handleChangeInput}
           error={!!errors['description']}
           helperText={errors['description']}
+          multiline
+          rows={5}
         />
       </Grid>
 
