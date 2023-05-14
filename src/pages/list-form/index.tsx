@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Stack, Typography } from '@mui/material'
+import moment from 'moment'
+import { IconButton, Stack, Typography } from '@mui/material'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -25,19 +26,12 @@ type IForm = {
   created_at: string
   updated_at: string
 }
-export default function ListFormPage() {
-  function createData(
-    id: number,
-    email: string,
-    subject: string,
-    body: string,
-    phone: string,
-    created_at: string,
-    updated_at: string
-  ) {
-    return { id, email, subject, body, phone, created_at, updated_at }
-  }
+function createData(form: IForm) {
+  const { id, email, subject, body, phone, created_at, updated_at } = form
+  return { id, email, subject, body, phone, created_at, updated_at }
+}
 
+export default function ListFormPage() {
   const [form, setForm] = useState<IForm[]>([])
   const [open, setOpen] = useState(false)
   const [idSubscriberCurrent, setIdSubscriberCurrent] = useState<{
@@ -67,18 +61,7 @@ export default function ListFormPage() {
   const fetchApi = async () => {
     try {
       const { data } = await getListForm()
-      const newForm = data.map((item: IForm) =>
-        createData(
-          item?.id,
-          item?.email,
-          item?.subject,
-          item?.body,
-          item?.phone,
-          item?.created_at,
-          item?.updated_at
-        )
-      )
-      console.log(newForm)
+      const newForm = data.map((item: IForm) => createData(item))
       setForm(newForm)
     } catch (error) {
       console.log(error)
@@ -137,14 +120,16 @@ export default function ListFormPage() {
                   <TableCell align="left">{row?.body}</TableCell>
                   <TableCell align="left">{row?.phone}</TableCell>
                   <TableCell align="left">
-                    {new Date(row?.created_at).toLocaleDateString()}
+                    {moment(row?.created_at).format('MMMM Do YYYY, h:mm:ss A')}
                   </TableCell>
                   <TableCell
                     align="center"
                     style={{ cursor: 'pointer' }}
                     onClick={() => handleClickOpen(row?.id, row?.email)}
                   >
-                    <DeleteIcon />
+                    <IconButton>
+                      <DeleteIcon color="error" />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}

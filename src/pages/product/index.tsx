@@ -6,24 +6,20 @@ import {
   Button,
   Drawer,
   IconButton,
-  MenuItem,
   Pagination,
-  SelectChangeEvent,
   Stack,
   Typography
 } from '@mui/material'
 import { IGroup, IProduct } from '@/constants/types'
 import groupService from '@/api/group'
-import CustomSelect from '@/components/form/CustomSelect'
-import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import useDrawer from '@/hooks/useDrawer'
-import CreateProduct from './create'
 import SelectGroup from './SelectGroup'
 import ConfirmDialog from '@/components/confirm-dialog'
+import CreateProduct from './create'
 
 const DEFAULT_PAGINATION = {
   page: 1,
@@ -32,9 +28,7 @@ const DEFAULT_PAGINATION = {
 }
 
 export default function ProductPage() {
-  const location = useLocation()
-
-  const [groupList, setGroupList] = useState<IGroup[]>([])
+  const [_, setGroupList] = useState<IGroup[]>([])
   const [groupId, setGroupId] = useState(0)
 
   const [productList, setProductList] = useState<IProduct[]>([])

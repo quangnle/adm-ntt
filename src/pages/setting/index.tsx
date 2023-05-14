@@ -4,6 +4,7 @@ import ChangePassword from './ChangePassword'
 import useFetchConfig from '@/hooks/useFetchConfig'
 import CircularProgress from '@mui/material/CircularProgress'
 import ChangeLogo from './ChangeLogo'
+import DebugMaintenance from './DebugMaintenance'
 
 export default function SettingPage() {
   const [data, isLoading] = useFetchConfig('contact')
@@ -77,6 +78,18 @@ export default function SettingPage() {
             }}
           >
             <ChangePassword />
+          </Paper>
+        </Grid>
+        <Grid item xs={6} sx={{ p: 2 }}>
+          <Paper
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              p: 2,
+              height: '100%'
+            }}
+          >
+            <DebugMaintenance />
           </Paper>
         </Grid>
       </Grid>
