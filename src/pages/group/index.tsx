@@ -13,7 +13,6 @@ import {
 import { IGroup, ICategory } from '@/constants/types'
 import CustomSelect from '@/components/form/CustomSelect'
 import { useLocation } from 'react-router-dom'
-import moment from 'moment'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
@@ -38,7 +37,7 @@ export default function GroupPage() {
   const [pagination, setPagination] = useState(DEFAULT_PAGINATION)
 
   const [selectedProduct, setSelectProduct] = useState<IGroup | null>(null)
-  const [_, setSelectedIds] = useState<number[]>([])
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
 
   const [showDrawer, toggleDrawer, setShowDrawer] = useDrawer()
 
@@ -53,10 +52,36 @@ export default function GroupPage() {
     }
   }
 
-  const fetchProducts = async () => {
+  const deleteGroups = async () => {
+    try {
+      const fetchData = await groupService.deleteMany({
+        ids: selectedIds
+      })
+      if (fetchData) {
+        fetchGroup()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const deleteOneGroup = async (selectedId: number) => {
+    try {
+      const fetchData = await groupService.deleteMany({
+        ids: [selectedId]
+      })
+      if (fetchData) {
+        fetchGroup()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const fetchGroup = async () => {
     try {
       const fetchData = await groupService.getAll({
-        category_id: categoryId,
+        category_id: categoryId == 0 ? undefined : categoryId,
         page: pagination.page,
         per_page: pagination.perPage
       })
@@ -82,7 +107,7 @@ export default function GroupPage() {
   }, [categoriesList])
 
   useEffect(() => {
-    categoryId && fetchProducts()
+    fetchGroup()
   }, [categoryId, pagination.page])
 
   const handleChangePagination = (
@@ -96,13 +121,22 @@ export default function GroupPage() {
     return [
       { key: 'id', header: '#ID' },
       {
-        key: 'title',
-        header: 'Title',
+        key: 'label',
+        header: 'Label',
         value: (item: IGroup) => (
           <Stack direction="row" alignItems="center" columnGap={2}>
             {item.image && (
               <img src={item.image} alt="" style={{ maxWidth: 100 }} />
             )}
+            <p>{item.label}</p>
+          </Stack>
+        )
+      },
+      {
+        key: 'title',
+        header: 'Title',
+        value: (item: IGroup) => (
+          <Stack direction="row" alignItems="center" columnGap={2}>
             <p>{item.title}</p>
           </Stack>
         )
@@ -128,7 +162,7 @@ export default function GroupPage() {
             >
               <EditIcon />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => deleteOneGroup(item.id)}>
               <DeleteIcon color="error" />
             </IconButton>
           </Stack>
@@ -172,6 +206,15 @@ export default function GroupPage() {
             mb={2}
           >
             <Button
+              style={{ margin: '16px 0', marginRight: 16 }}
+              color="error"
+              variant="outlined"
+              sx={{ mb: 2 }}
+              onClick={deleteGroups}
+            >
+              Delete
+            </Button>
+            <Button
               style={{ margin: '16px 0' }}
               variant="outlined"
               sx={{ mb: 2 }}
@@ -186,23 +229,19 @@ export default function GroupPage() {
         )}
       </Stack>
 
-      {categoryId !== 0 && (
-        <>
-          <MyTable
-            data={groupList}
-            columns={columns}
-            selectable
-            onChangeSelection={setSelectedIds}
-          />
+      <MyTable
+        data={groupList}
+        columns={columns}
+        selectable
+        onChangeSelection={setSelectedIds}
+      />
 
-          <Pagination
-            sx={{ mt: 2, mx: 'auto' }}
-            count={Math.ceil(pagination.total / pagination.perPage)}
-            page={pagination.page}
-            onChange={handleChangePagination}
-          />
-        </>
-      )}
+      <Pagination
+        sx={{ mt: 2, mx: 'auto' }}
+        count={Math.ceil(pagination.total / pagination.perPage)}
+        page={pagination.page}
+        onChange={handleChangePagination}
+      />
 
       <Drawer
         anchor="right"
@@ -215,11 +254,11 @@ export default function GroupPage() {
         }}
       >
         <CreateProduct
-          categoryId={categoryId}
+          categoryList={categoriesList}
           data={selectedProduct}
           onSuccess={() => {
             toggleDrawer(false)
-            fetchProducts()
+            fetchGroup()
           }}
         />
       </Drawer>

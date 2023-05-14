@@ -39,7 +39,8 @@ export const deleteMany = async (params: { ids: number[] }) =>
 const groupService = {
   getAll,
   create,
-  update
+  update,
+  deleteMany
 }
 
 export default groupService

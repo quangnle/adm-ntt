@@ -1,12 +1,19 @@
 import groupService from '@/api/group'
+import CustomSelect from '@/components/form/CustomSelect'
 import MyTextField from '@/components/form/MyTextField'
 import TextEditor from '@/components/form/TextEditor'
 import UploadImage from '@/components/form/UploadImage'
-import { IGroup } from '@/constants/types'
+import { ICategory, IGroup } from '@/constants/types'
 import { mergePattern } from '@/utils'
 import { LoadingButton } from '@mui/lab'
-import { Grid, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
+import {
+  Grid,
+  MenuItem,
+  SelectChangeEvent,
+  Stack,
+  Typography
+} from '@mui/material'
+import { useEffect, useState } from 'react'
 
 const DEFAULT_FORM = {
   id: 0,
@@ -20,22 +27,24 @@ const DEFAULT_FORM = {
 
 export default function CreateProduct({
   data,
-  categoryId,
-  onSuccess
+  onSuccess,
+  categoryList
 }: {
   data: IGroup | null
-  categoryId?: number
   onSuccess?: () => void
+  categoryList: ICategory[]
 }) {
   const [isCreating, setIsCreating] = useState(false)
+  const [categoryId, setCategoryId] = useState(0)
+
   const [form, setForm] = useState<typeof DEFAULT_FORM>(
     data
       ? (mergePattern(DEFAULT_FORM, {
-          ...data
+          ...data,
+          category_id: categoryId
         }) as typeof DEFAULT_FORM)
       : { ...DEFAULT_FORM, category_id: categoryId || 0 }
   )
-
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
     const newForm = {
@@ -45,10 +54,14 @@ export default function CreateProduct({
     setForm(newForm)
   }
 
+  useEffect(() => {
+    data && setCategoryId(data.category_id)
+  }, [data])
+
   const handleSubmitForm = async () => {
     try {
       setIsCreating(true)
-      const payload = { ...form }
+      const payload = { ...form, category_id: categoryId }
       const request = payload.id ? groupService.update : groupService.create
 
       const { data } = await request(payload)
@@ -106,6 +119,23 @@ export default function CreateProduct({
             multiline
             rows={3}
           />
+        </Grid>
+        <Grid item xs={12}>
+          <CustomSelect
+            label="Category"
+            value={categoryId}
+            onChange={(event: SelectChangeEvent<unknown>) => {
+              setCategoryId(parseInt(event.target.value as string) || 0)
+            }}
+            sx={{ width: 400 }}
+          >
+            <MenuItem value={0}>-- Choose Category --</MenuItem>
+            {categoryList?.map((gr) => (
+              <MenuItem key={gr.id} value={gr.id}>
+                {gr?.title}
+              </MenuItem>
+            ))}
+          </CustomSelect>
         </Grid>
         <Grid item xs={12}>
           <TextEditor
