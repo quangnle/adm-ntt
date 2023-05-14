@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const getAll = async (params?: {
   page?: number
+  title?: string
   per_page?: number
   order_by?: 'priority' | 'id'
   order_type?: 'asc' | 'desc'
