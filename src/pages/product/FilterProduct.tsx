@@ -1,16 +1,17 @@
 import categoryService from '@/api/category'
 import groupService from '@/api/group'
 import CustomSelect from '@/components/form/CustomSelect'
+import MyTextField from '@/components/form/MyTextField'
 import { ICategory, IGroup } from '@/constants/types'
-import { MenuItem, SelectChangeEvent, Stack } from '@mui/material'
+import { MenuItem, SelectChangeEvent, Stack, debounce } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-export default function SelectGroup({
-  groupId,
-  setGroupId
+export default function FilterProduct({
+  value,
+  onChange
 }: {
-  groupId: number
-  setGroupId: (id: number) => void
+  value: { groupId: number; keyword: string }
+  onChange: (value: { groupId: number; keyword: string }) => void
 }) {
   const [categoryList, setCategoryList] = useState<ICategory[]>([])
   const [categoryId, setCategoryId] = useState(0)
@@ -54,7 +55,10 @@ export default function SelectGroup({
   useEffect(() => {
     if (groupList?.length) {
       const searchParams = new URLSearchParams(location.search)
-      setGroupId(parseInt(searchParams.get('group') || '0') || 0)
+      onChange({
+        ...value,
+        groupId: parseInt(searchParams.get('group') || '0') || 0
+      })
     }
   }, [groupList])
 
@@ -65,7 +69,10 @@ export default function SelectGroup({
         value={categoryId}
         onChange={(event: SelectChangeEvent<unknown>) => {
           setCategoryId(parseInt(event.target.value as string) || 0)
-          setGroupId(0)
+          onChange({
+            ...value,
+            groupId: 0
+          })
         }}
         sx={{ width: 300 }}
       >
@@ -79,9 +86,12 @@ export default function SelectGroup({
 
       <CustomSelect
         label="Group"
-        value={groupId}
+        value={value.groupId}
         onChange={(event: SelectChangeEvent<unknown>) => {
-          setGroupId(parseInt(event.target.value as string) || 0)
+          onChange({
+            ...value,
+            groupId: parseInt(event.target.value as string) || 0
+          })
         }}
         sx={{ width: 300 }}
       >
@@ -96,6 +106,16 @@ export default function SelectGroup({
           </MenuItem>
         ))}
       </CustomSelect>
+
+      <MyTextField
+        label="Search"
+        sx={{ width: 300 }}
+        placeholder="Enter product title to search"
+        onChange={debounce(
+          (event) => onChange({ ...value, keyword: event.target.value }),
+          500
+        )}
+      />
     </Stack>
   )
 }

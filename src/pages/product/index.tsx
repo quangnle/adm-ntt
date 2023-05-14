@@ -10,14 +10,13 @@ import {
   Stack,
   Typography
 } from '@mui/material'
-import { IGroup, IProduct } from '@/constants/types'
-import groupService from '@/api/group'
+import { IProduct } from '@/constants/types'
 import moment from 'moment'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import useDrawer from '@/hooks/useDrawer'
-import SelectGroup from './SelectGroup'
+import FilterProduct from './FilterProduct'
 import ConfirmDialog from '@/components/confirm-dialog'
 import CreateProduct from './create'
 
@@ -27,9 +26,13 @@ const DEFAULT_PAGINATION = {
   perPage: 10
 }
 
+let debounce: NodeJS.Timeout
+
 export default function ProductPage() {
-  const [_, setGroupList] = useState<IGroup[]>([])
-  const [groupId, setGroupId] = useState(0)
+  const [filter, setFilter] = useState({
+    groupId: 0,
+    keyword: ''
+  })
 
   const [productList, setProductList] = useState<IProduct[]>([])
   const [pagination, setPagination] = useState(DEFAULT_PAGINATION)
@@ -39,21 +42,11 @@ export default function ProductPage() {
 
   const [showDrawer, toggleDrawer, setShowDrawer] = useDrawer()
 
-  const fetchGroups = async () => {
-    try {
-      const fetchData = await groupService.getAll({ per_page: 1000 })
-      if (fetchData) {
-        setGroupList(fetchData?.data)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   const fetchProducts = async () => {
     try {
       const fetchData = await productService.getAll({
-        group_id: groupId,
+        group_id: filter.groupId === 0 ? undefined : filter.groupId,
+        title: filter.keyword === '' ? undefined : filter.keyword,
         page: pagination.page,
         per_page: pagination.perPage
       })
@@ -68,12 +61,17 @@ export default function ProductPage() {
   }
 
   useEffect(() => {
-    fetchGroups()
-  }, [])
+    fetchProducts()
+  }, [filter, pagination.page])
 
-  useEffect(() => {
-    groupId && fetchProducts()
-  }, [groupId, pagination.page])
+  // useEffect(() => {
+  //   if (debounce) {
+  //     clearTimeout(debounce)
+  //   }
+  //   debounce = setTimeout(() => {
+  //     fetchProducts()
+  //   }, 500)
+  // }, [filter.keyword])
 
   const handleChangePagination = (
     _: React.ChangeEvent<unknown>,
@@ -98,8 +96,12 @@ export default function ProductPage() {
         )
       },
       {
-        key: 'description',
-        header: 'Description'
+        key: 'category_title',
+        header: 'Collection'
+      },
+      {
+        key: 'group_label',
+        header: 'Group'
       },
       {
         key: 'created_at',
@@ -180,56 +182,52 @@ export default function ProductPage() {
         justifyContent="space-between"
         mb={2}
       >
-        <SelectGroup groupId={groupId} setGroupId={setGroupId} />
+        <FilterProduct value={filter} onChange={setFilter} />
       </Stack>
 
-      {groupId !== 0 && (
-        <>
-          <Stack direction="row" justifyContent="space-between" mb={2}>
+      <Stack direction="row" justifyContent="space-between" mb={2}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setSelectProduct(null)
+            setShowDrawer(true)
+          }}
+        >
+          Create New Product
+        </Button>
+        {!!selectedIds.length && (
+          <Stack
+            direction="row"
+            justifyContent="end"
+            alignItems="center"
+            spacing={2}
+          >
+            <Typography>Selected Product: {selectedIds.length}</Typography>
             <Button
-              variant="outlined"
+              variant="contained"
+              color="error"
               onClick={() => {
-                setSelectProduct(null)
-                setShowDrawer(true)
+                setShowDeleteModal(true)
               }}
             >
-              Create New Product
+              Delete All
             </Button>
-            {!!selectedIds.length && (
-              <Stack
-                direction="row"
-                justifyContent="end"
-                alignItems="center"
-                spacing={2}
-              >
-                <Typography>Selected Product: {selectedIds.length}</Typography>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => {
-                    setShowDeleteModal(true)
-                  }}
-                >
-                  Delete All
-                </Button>
-              </Stack>
-            )}
           </Stack>
-          <MyTable
-            data={productList}
-            columns={columns}
-            selectable
-            onChangeSelection={setSelectedIds}
-          />
+        )}
+      </Stack>
+      <MyTable
+        data={productList}
+        columns={columns}
+        selectable
+        onChangeSelection={setSelectedIds}
+      />
 
-          <Pagination
-            sx={{ mt: 2, mx: 'auto' }}
-            count={Math.ceil(pagination.total / pagination.perPage)}
-            page={pagination.page}
-            onChange={handleChangePagination}
-          />
-        </>
-      )}
+      <Pagination
+        sx={{ mt: 2, mx: 'auto' }}
+        count={Math.ceil(pagination.total / pagination.perPage)}
+        page={pagination.page}
+        onChange={handleChangePagination}
+      />
 
       <Drawer
         anchor="right"
@@ -243,7 +241,7 @@ export default function ProductPage() {
       >
         <CreateProduct
           data={selectedProduct}
-          groupId={groupId}
+          groupId={filter.groupId}
           onSuccess={() => {
             setShowDrawer(false)
             fetchProducts()

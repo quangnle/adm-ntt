@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export const getAll = async (params?: {
   group_id?: number
+  title?: string
   page?: number
   per_page?: number
   order_by?: 'priority' | ''
