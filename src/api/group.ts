@@ -33,6 +33,9 @@ export const update = async ({
   category_id: number
 }) => axios.patch(`/groups/${id}`, payload)
 
+export const deleteMany = async (params: { ids: number[] }) =>
+  axios.delete('/groups', { params })
+
 const groupService = {
   getAll,
   create,
