@@ -6,6 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import ChangeLogo from './ChangeLogo'
 import DebugMaintenance from './DebugMaintenance'
 import MenuLayout from './MenuLayout'
+import SliderSetting from './SliderSetting'
 
 export default function SettingPage() {
   const [data, isLoading] = useFetchConfig('contact')
@@ -103,6 +104,18 @@ export default function SettingPage() {
             }}
           >
             <MenuLayout />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sx={{ p: 2 }}>
+          <Paper
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              p: 2,
+              height: '100%'
+            }}
+          >
+            <SliderSetting />
           </Paper>
         </Grid>
       </Grid>
