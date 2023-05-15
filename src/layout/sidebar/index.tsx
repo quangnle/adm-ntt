@@ -77,7 +77,7 @@ const menus: IMenus = {
     }
   },
   'about-us': { value: 'About Us', icon: <InfoIcon /> },
-  'phrases-load': { value: ' Phrases Load', icon: <SettingsIcon /> }
+  'phrases-load': { value: ' Phrases', icon: <SettingsIcon /> }
 }
 
 export default function AppSidebar() {

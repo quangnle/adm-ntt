@@ -45,7 +45,7 @@ const internalRoutes = [
     component: <GroupPage />
   },
   {
-    name: 'Phrases Load',
+    name: 'Phrases',
     path: '/admin/phrases-load',
     component: <PhrasesPage />
   }

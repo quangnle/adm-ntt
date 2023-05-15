@@ -53,8 +53,8 @@ export default function PhrasesPage() {
       const fetchData = await variableService.getAll({
         page: pagination.page,
         per_page: pagination.perPage,
-        search: searchLabel,
-        group: searchGroup
+        search: searchLabel === '' ? undefined : searchLabel,
+        group: searchGroup === '' ? undefined : searchGroup
       })
       if (fetchData) {
         const { data: list, ...pagi } = fetchData
