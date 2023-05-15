@@ -164,7 +164,7 @@ export default function PhrasesPage() {
         handleAgree={handleConfirmDeleteMultiModal}
       />
       <Typography variant="h3" mb={2}>
-        Variable
+        Phrases
       </Typography>
 
       <Stack
@@ -224,7 +224,7 @@ export default function PhrasesPage() {
               setShowDrawer(true)
             }}
           >
-            Create New Group
+            Create New Phrase
           </Button>
         </Stack>
       </Stack>
