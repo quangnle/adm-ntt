@@ -194,7 +194,7 @@ export default function PhrasesPage() {
               onChange={debounce((e) => setSearchLabel(e.target.value), 300)}
               fullWidth
               label="Name"
-              placeholder="Enter variable name"
+              placeholder="Enter Phrase name"
               name="name"
             />
           </Stack>
