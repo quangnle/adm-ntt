@@ -16,6 +16,7 @@ export type TKeyConfig =
   | 'contact-detail'
   | 'debug'
   | 'maintenance'
+  | 'slider-setting'
 
 export const getConfigWithKey = async (key: TKeyConfig) =>
   axios.get(`/config/key/${key}`)
