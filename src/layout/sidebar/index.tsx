@@ -23,6 +23,7 @@ import Collapse from '@mui/material/Collapse'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 const drawerWidth = 240
 
@@ -75,7 +76,8 @@ const menus: IMenus = {
       'list-email': { value: 'List Email', icon: <MailIcon /> }
     }
   },
-  'about-us': { value: 'About Us', icon: <InfoIcon /> }
+  'about-us': { value: 'About Us', icon: <InfoIcon /> },
+  'phrases-load': { value: ' Phrases Load', icon: <SettingsIcon /> }
 }
 
 export default function AppSidebar() {

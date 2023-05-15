@@ -14,6 +14,7 @@ import ProductPage from '@/pages/product'
 import ProductsSolutions from '@/pages/products-solutions'
 import GroupPage from '@/pages/group'
 import CategoryPage from '@/pages/cagories'
+import PhrasesPage from '@/pages/phrases'
 
 const internalRoutes = [
   { name: 'Dashboard', path: '/admin', component: <Dashboard /> },
@@ -42,6 +43,11 @@ const internalRoutes = [
     name: 'Groups',
     path: '/admin/groups',
     component: <GroupPage />
+  },
+  {
+    name: 'Phrases Load',
+    path: '/admin/phrases-load',
+    component: <PhrasesPage />
   }
 ]
 
