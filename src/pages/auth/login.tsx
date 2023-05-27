@@ -131,7 +131,9 @@ export default function Login() {
             >
               Sign In
             </Button>
-            <Typography align="center">NTT Solution Admin Dashboard</Typography>
+            <Typography align="center">
+              TNC Tech Corp Admin Dashboard
+            </Typography>
           </Box>
         </Box>
       </Grid>
