@@ -19,8 +19,8 @@ import { useSnackbar } from 'notistack'
 export default function Login() {
   const { enqueueSnackbar } = useSnackbar()
   const [form, setForm] = useState({
-    username: 'admin',
-    password: '123456'
+    username: '',
+    password: ''
   })
 
   const credential = useSelector(AuthSelector.getCredential)
